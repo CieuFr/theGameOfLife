@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.collections.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jeudelavie.controleur.FrameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jeudelavie.controleur.FrameController">
    <children>
-      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" fillHeight="false" VBox.vgrow="ALWAYS">
                <children>
                   <Pane fx:id="boardPane" minHeight="200.0" minWidth="200.0" style="-fx-background-color: #ffffff;" />
                </children>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" maxHeight="200.0" prefHeight="200.0" style="-fx-background-color: white;" VBox.vgrow="NEVER">
+            <HBox alignment="CENTER" maxHeight="200.0" prefHeight="200.0" style="-fx-background-color: white;" VBox.vgrow="NEVER">
                <children>
                   <HBox prefHeight="200.0">
                      <children>
@@ -27,8 +29,9 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin></Label>
-                              <ComboBox prefWidth="150.0" />
-                              <Label alignment="TOP_LEFT" prefHeight="160.0" prefWidth="200.0" text="Labelqsdqsdqsdqsdqsdqsdq sdqsd qsd qsd " textAlignment="JUSTIFY" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS" />
+                              <ComboBox fx:id="patternLoadingCombo" prefWidth="150.0" promptText="..." />
+                              <Region prefHeight="23.0" prefWidth="107.0" />
+                              <Button fx:id="loadButton" mnemonicParsing="false" onAction="#onLoadButtonAction" prefHeight="15.0" prefWidth="72.0" text="Load" />
                            </children>
                            <HBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -43,13 +46,45 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ComboBox prefWidth="150.0" />
+                        <ComboBox fx:id="lonelinessDeathCombo" prefWidth="150.0">
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="1" />
+                                 <String fx:value="2" />
+                                 <String fx:value="3" />
+                                 <String fx:value="4" />
+                                 <String fx:value="5" />
+                                 <String fx:value="6" />
+                                 <String fx:value="7" />
+                                 <String fx:value="8" />
+                              </FXCollections>
+                           </items>
+                           <value>
+                              <String fx:value="3" />
+                           </value>
+                        </ComboBox>
                         <Label text="SuffocationDeath">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ComboBox prefWidth="150.0" />
+                        <ComboBox fx:id="sufocationDeathCombo" prefWidth="150.0">
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="1" />
+                                 <String fx:value="2" />
+                                 <String fx:value="3" />
+                                 <String fx:value="4" />
+                                 <String fx:value="5" />
+                                 <String fx:value="6" />
+                                 <String fx:value="7" />
+                                 <String fx:value="8" />
+                              </FXCollections>
+                           </items>
+                           <value>
+                              <String fx:value="3" />
+                           </value>
+                        </ComboBox>
                      </children>
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -62,13 +97,45 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ComboBox prefWidth="150.0" />
+                        <ComboBox fx:id="minHealthCombo" prefWidth="150.0">
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="1" />
+                                 <String fx:value="2" />
+                                 <String fx:value="3" />
+                                 <String fx:value="4" />
+                                 <String fx:value="5" />
+                                 <String fx:value="6" />
+                                 <String fx:value="7" />
+                                 <String fx:value="8" />
+                              </FXCollections>
+                           </items>
+                           <value>
+                              <String fx:value="3" />
+                           </value>
+                        </ComboBox>
                         <Label text="MaxHealth">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ComboBox prefWidth="150.0" />
+                        <ComboBox fx:id="maxHealthCombo" prefWidth="150.0">
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="1" />
+                                 <String fx:value="2" />
+                                 <String fx:value="3" />
+                                 <String fx:value="4" />
+                                 <String fx:value="5" />
+                                 <String fx:value="6" />
+                                 <String fx:value="7" />
+                                 <String fx:value="8" />
+                              </FXCollections>
+                           </items>
+                           <value>
+                              <String fx:value="3" />
+                           </value>
+                        </ComboBox>
                      </children>
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -81,7 +148,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField />
+                        <TextField fx:id="boardSizeTextField" />
                      </children>
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -91,16 +158,39 @@
                      <children>
                         <HBox nodeOrientation="LEFT_TO_RIGHT">
                            <children>
-                              <Button mnemonicParsing="false" text="x" />
-                              <Button mnemonicParsing="false" text="=" />
-                              <Button mnemonicParsing="false" text="&gt;" />
-                              <Button mnemonicParsing="false" text="O" />
+                              <Button fx:id="nextGenerationButton" mnemonicParsing="false" onAction="#onNextGenerationButtonAction" prefHeight="25.0" prefWidth="48.0" text="O" />
+                              <Region prefHeight="0.0" prefWidth="28.0" />
+                              <Label prefHeight="17.0" prefWidth="61.0" text="nextStep" />
                            </children>
                         </HBox>
-                        <Label text="Label" />
+                        <Region prefHeight="62.0" prefWidth="88.0" />
+                        <HBox prefHeight="28.0" prefWidth="157.0">
+                           <children>
+                              <Button fx:id="randomizeButton" mnemonicParsing="false" onAction="#onRandomizeButtonAction" prefHeight="25.0" prefWidth="49.0" text="&gt;" />
+                              <Region prefHeight="0.0" prefWidth="25.0" />
+                              <Label prefHeight="17.0" prefWidth="61.0" text="randomize" />
+                           </children>
+                        </HBox>
+                        <Region layoutX="10.0" layoutY="85.0" prefHeight="62.0" prefWidth="88.0" />
+                        <HBox prefHeight="28.0" prefWidth="157.0">
+                           <children>
+                              <Button fx:id="resetButton" mnemonicParsing="false" onAction="#onResetButtonAction" prefHeight="25.0" prefWidth="49.0" text="x" />
+                              <Region prefHeight="0.0" prefWidth="25.0" />
+                              <Label prefHeight="17.0" prefWidth="47.0" text="reset" />
+                           </children>
+                        </HBox>
+                        <Region prefHeight="62.0" prefWidth="88.0" />
+                        <Region layoutX="10.0" layoutY="129.0" prefHeight="62.0" prefWidth="88.0" />
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Button" />
+                              <Button fx:id="playPauseButton" mnemonicParsing="false" onAction="#onPlayPauseButtonAction" prefHeight="39.0" prefWidth="99.0" text="Play" />
+                              <Region prefHeight="62.0" prefWidth="88.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="BOTTOM_RIGHT" layoutX="10.0" layoutY="154.0" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Region prefHeight="62.0" prefWidth="88.0" />
+                              <Button fx:id="quitButton1" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onQuitButtonAction" prefHeight="25.0" prefWidth="75.0" text="Quit" />
                            </children>
                         </HBox>
                      </children>
