@@ -11,15 +11,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        BoardController boardController = new BoardController(100);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/jeudelavie/vue/frame-view.fxml"));
-
+        fxmlLoader.setController(new FrameController(boardController.getBoardView()));
         AnchorPane root = fxmlLoader.load();
         FrameController frameController = fxmlLoader.getController();
-        System.out.println(frameController);
-
-        BoardController boardController = new BoardController(100);
-
-        frameController.addBoardView(boardController.getBoardView());
 
         primaryStage.setTitle("The Game Of Life");
         primaryStage.setScene(new Scene(root, 300, 275));
