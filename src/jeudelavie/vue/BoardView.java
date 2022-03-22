@@ -2,29 +2,29 @@ package jeudelavie.vue;
 
 import javafx.scene.layout.GridPane;
 import jeudelavie.controleur.BoardController;
-import jeudelavie.model.BoardModel;
+import jeudelavie.model.BoardModelOld;
 
 public class BoardView extends GridPane {
-    private BoardModel boardModel;
+    private BoardModelOld boardModelOld;
     private BoardController boardController;
 
-    public BoardView(BoardController boardController, BoardModel boardModel){
+    public BoardView(BoardController boardController, BoardModelOld boardModelOld){
         super();
         this.boardController = boardController;
-        this.boardModel = boardModel;
+        this.boardModelOld = boardModelOld;
         this.setGridLinesVisible(true);
         this.setVgap(2);
         this.setHgap(2);
-        for (int x = 0; x < this.boardModel.getBoardSize(); x++) {
-            for (int y = 0; y < this.boardModel.getBoardSize(); y++) {
-                this.add(this.boardModel.getCellAt(x, y), x, y);
+        for (int x = 0; x < this.boardModelOld.getBoardSize(); x++) {
+            for (int y = 0; y < this.boardModelOld.getBoardSize(); y++) {
+                this.add(this.boardModelOld.getCellAt(x, y), x, y);
             }
         }
     }
 
 
-    public BoardModel getBoardModel() {
-        return boardModel;
+    public BoardModelOld getBoardModel() {
+        return boardModelOld;
     }
 
     public BoardController getBoardController() {

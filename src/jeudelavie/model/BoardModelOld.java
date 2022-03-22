@@ -2,9 +2,8 @@ package jeudelavie.model;
 
 import jeudelavie.controleur.BoardController;
 import jeudelavie.miscellaneous.Cell;
-import jeudelavie.vue.BoardView;
 
-public class BoardModel {
+public class BoardModelOld {
     private BoardController boardController;
 
     private Cell[][] cellsMatrix;
@@ -12,7 +11,7 @@ public class BoardModel {
     private int boardSize;
     private int cellSize;
 
-    public BoardModel(BoardController boardController, int boardSize) {
+    public BoardModelOld(BoardController boardController, int boardSize) {
         this.boardController = boardController;
 
         this.boardSize = boardSize;

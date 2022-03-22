@@ -1,53 +1,54 @@
 package jeudelavie.model;
 
-import jeudelavie.controleur.BoardController;
-import jeudelavie.miscellaneous.Cell;
-
 public class BoardModel {
-    private BoardController boardController;
 
-    private Cell[][] cellsMatrix;
-    private Cell[][] cellsMatrix2;
-    private int boardSize;
-    private int cellSize;
+    private int vieMin, vieMax, mortMin, mortMax;
 
-    public BoardModel(BoardController boardController, int boardSize) {
-        this.boardController = boardController;
+    private int size;
+    private int[][] board;
 
-        this.boardSize = boardSize;
-        this.cellsMatrix = new Cell[boardSize][boardSize];
-        for (int x = 0; x < this.boardSize; x++) {
-            for (int y = 0; y < this.boardSize; y++) {
-                this.cellsMatrix[x][y] = new Cell(10);
-            }
-        }
+    public BoardModel(int size) {
+        this.size = size;
+        this.board = new int[size][size];
     }
 
-    public int getCellSize() {
-        return cellSize;
+    public void setAlive(int x, int y) {
+        this.board[x][y] = 1;
     }
 
-    public Cell[][] getCellsMatrix() {
-        return cellsMatrix;
+    public void setDead(int x, int y) {
+        this.board[x][y] = 0;
     }
 
-    public Cell getCellAt(int x, int y) {
-        return this.cellsMatrix[x][y];
+    public int getVieMin() {
+        return vieMin;
     }
 
-    public void killCellAt(int x, int y) {
-        this.cellsMatrix[x][y].kill();
+    public void setVieMin(int vieMin) {
+        this.vieMin = vieMin;
     }
 
-    public void setCellAliveAt(int x, int y) {
-        this.cellsMatrix[x][y].setAlive();
+    public int getVieMax() {
+        return vieMax;
     }
 
-    public int getBoardSize() {
-        return boardSize;
+    public void setVieMax(int vieMax) {
+        this.vieMax = vieMax;
     }
 
-    public void setCellSize(int i) {
-        this.cellSize = i;
+    public int getMortMin() {
+        return mortMin;
+    }
+
+    public void setMortMin(int mortMin) {
+        this.mortMin = mortMin;
+    }
+
+    public int getMortMax() {
+        return mortMax;
+    }
+
+    public void setMortMax(int mortMax) {
+        this.mortMax = mortMax;
     }
 }
