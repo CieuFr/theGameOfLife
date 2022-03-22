@@ -1,5 +1,3 @@
-package jeudelavie.model;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +8,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/jeudelavie/vue/sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/jeudelavie/vue/frame-view.fxml"));
         primaryStage.setTitle("The Game Of Life");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
