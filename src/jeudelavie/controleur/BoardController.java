@@ -51,12 +51,17 @@ public class BoardController {
         System.out.println(Duration.between(start, end));
     }
 
+<<<<<<< HEAD
     public void computeNextGeneration(){
+=======
+    private void computeNextGeneration(){
+>>>>>>> victor
         for(int i = 0; i < boardModel.getBoardSize(); i++){
             for( int j = 0 ; j < boardModel.getBoardSize() ; j++){
                 int aliveCells = 0;
                 for(int iNearCells = -1; iNearCells < 2; iNearCells++){
                     for( int jNearCells = -1 ; jNearCells < 2 ; jNearCells++) {
+<<<<<<< HEAD
                        aliveCells += ((i+iNearCells < 0)||(j+jNearCells < 0) || (i+iNearCells > boardModel.getSize()-1) || (j+jNearCells > boardModel.getSize()-1) ) ? 0 :boardModel.getBoard()[i+iNearCells][j+jNearCells] ;
                     }
                 }
@@ -86,6 +91,23 @@ public class BoardController {
         }
     }
 
+=======
+                       aliveCells += boardModel.getCellsMatrix()[iNearCells][jNearCells] ;
+                    }
+                }
+                aliveCells -=  boardModel.getCellsMatrix()[i][j];
+
+                if(aliveCells == )
+
+
+            }
+        }
+
+
+    }
+
+
+>>>>>>> victor
     public BoardModel getBoardModel() {
         return boardModel;
     }
