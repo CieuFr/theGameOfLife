@@ -46,8 +46,29 @@ public class BoardController {
         System.out.println(Duration.between(start, end));
     }
 
-    public BoardModelOld getBoardModel() {
-        return boardModelOld;
+    private void computeNextGeneration(){
+        for(int i = 0; i < boardModel.getBoardSize(); i++){
+            for( int j = 0 ; j < boardModel.getBoardSize() ; j++){
+                int aliveCells = 0;
+                for(int iNearCells = -1; iNearCells < 2; iNearCells++){
+                    for( int jNearCells = -1 ; jNearCells < 2 ; jNearCells++) {
+                       aliveCells += boardModel.getCellsMatrix()[iNearCells][jNearCells] ;
+                    }
+                }
+                aliveCells -=  boardModel.getCellsMatrix()[i][j];
+
+                if(aliveCells == )
+
+
+            }
+        }
+
+
+    }
+
+
+    public BoardModel getBoardModel() {
+        return boardModel;
     }
 
     public BoardView getBoardView() {
