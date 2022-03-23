@@ -76,6 +76,16 @@ public class BoardModel {
         this.board[x][y] = 1;
     }
 
+    public void inverseState(int x, int y) {
+        if (this.board[x][y] == 1) {
+            this.board[x][y] = 0;
+        } else {
+            this.board[x][y] = 1;
+        }
+    }
+
+
+
     public void setDead(int x, int y) {
         this.board[x][y] = 0;
     }

@@ -35,14 +35,25 @@ public class BoardController {
         });
 
         this.boardView.setOnMouseClicked(clickEvent -> {
+
+
             System.out.println("Click detected");
             System.out.println(clickEvent);
+
 
             // TODO refactor
             int cellX = (int) Math.floor((clickEvent.getX() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
             int cellY = (int) Math.floor((clickEvent.getY() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
 
-            this.setAlive(cellX, cellY);
+            if(clickEvent.isShiftDown()){
+                int[][] array = {{1,1,1},{1, 1, 1},{1,1,1}};
+                this.pastFigure(array,3,cellX,cellY);
+
+            } else {
+                //boardModel.getBoard()[cellX][cellY] == 0 ?
+                        this.inverseCellState(cellX, cellY);
+
+            }
         });
     }
 
@@ -121,6 +132,17 @@ public class BoardController {
         draw();
     }
 
+    public void pastFigure(int[][] figure, int figureSize, int x, int y ) {
+        for (int i = 0; i < figureSize; i++) {
+            for (int j = 0; j < figureSize; j++) {
+                if(!(((x+i)>=boardSize)|| ((y+j)>=boardSize)) ){
+                    boardModel.getBoard()[x + i][y + j] = figure[i][j];
+                }
+            }
+        }
+        draw();
+    }
+
     public void draw() {
         GraphicsContext graphicsContext = this.boardView.getGraphicsContext2D();
         Affine affine = new Affine();
@@ -162,6 +184,11 @@ public class BoardController {
 
     public void setAlive(int cellX, int cellY) {
         this.boardModel.setAlive(cellX, cellY);
+        draw();
+    }
+
+    public void inverseCellState(int cellX, int cellY) {
+        this.boardModel.inverseState(cellX, cellY);
         draw();
     }
 }

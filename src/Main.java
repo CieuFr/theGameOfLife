@@ -28,6 +28,7 @@ public class Main extends Application {
         AnchorPane root = fxmlLoader.load();
         FrameController frameController = fxmlLoader.getController();
         frameController.addBoardController(boardController);
+        frameController.bindNumberOfIterations();
         boardController.draw();
 
         primaryStage.setTitle("The Game Of Life");

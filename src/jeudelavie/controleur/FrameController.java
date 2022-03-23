@@ -3,8 +3,11 @@ package jeudelavie.controleur;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import jeudelavie.model.BoardModel;
 import jeudelavie.model.FrameModel;
+import jeudelavie.vue.BoardView;
 
 import java.net.URL;
 import java.util.Optional;
@@ -15,6 +18,9 @@ public class FrameController implements Initializable {
 
     @FXML
     private Pane boardPane;
+
+    @FXML
+    private Pane figurePane;
 
     @FXML
     private ComboBox<String> patternLoadingCombo;
@@ -113,6 +119,10 @@ public class FrameController implements Initializable {
         this.boardPane.getChildren().add(this.boardController.getBoardView());
     }
 
+    public void bindNumberOfIterations(){
+        iterationsLabel.textProperty().bind(this.boardController.getBoardModel().getNumberOfIterations().asString());
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.frameModel.setLonelinessDeath(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem()));
@@ -124,8 +134,6 @@ public class FrameController implements Initializable {
         AtomicBoolean suffocationChanging = new AtomicBoolean(false);
         AtomicBoolean minHealthChanging = new AtomicBoolean(false);
         AtomicBoolean maxHealthChanging = new AtomicBoolean(false);
-
-        //iterationsLabel.textProperty().bind(this.frameModel.getNumberOfIterations().asString());
 
         lonelinessDeathCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             if (!lonelinessChanging.get()) {
@@ -204,7 +212,10 @@ public class FrameController implements Initializable {
                 maxHealthChanging.set(false);
             }
         });
+
+        figurePane.getChildren().add(new BoardView(new BoardController(10),new BoardModel(10)));
     }
+
 
 
     private ButtonType alertGenerationConfirmation() {

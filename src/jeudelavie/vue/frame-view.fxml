@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -20,7 +20,7 @@
                <children>
                   <HBox prefHeight="200.0">
                      <children>
-                        <Pane minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: red;" HBox.hgrow="ALWAYS">
+                        <Pane fx:id="figurePane" minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </HBox.margin></Pane>
@@ -184,8 +184,12 @@
                         <Region layoutX="10.0" layoutY="129.0" prefHeight="62.0" prefWidth="88.0" />
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="playPauseButton" mnemonicParsing="false" onAction="#onPlayPauseButtonAction" prefHeight="39.0" prefWidth="99.0" text="Play" />
-                              <Region prefHeight="62.0" prefWidth="88.0" />
+                              <Button fx:id="playPauseButton" mnemonicParsing="false" onAction="#onPlayPauseButtonAction" prefHeight="49.0" prefWidth="71.0" text="Play" />
+                              <Label fx:id="iterationsLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="46.0" prefWidth="85.0" textAlignment="CENTER" textFill="#ff6a00">
+                                 <font>
+                                    <Font name="Roboto" size="18.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </HBox>
                         <HBox alignment="BOTTOM_RIGHT" layoutX="10.0" layoutY="154.0" prefHeight="100.0" prefWidth="200.0">
@@ -202,10 +206,5 @@
                </children></HBox>
          </children>
       </VBox>
-      <Label fx:id="iterationsLabel" layoutX="11.0" layoutY="7.0" prefHeight="47.0" prefWidth="878.0" textFill="#ff6a00">
-         <font>
-            <Font name="Roboto" size="27.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>
