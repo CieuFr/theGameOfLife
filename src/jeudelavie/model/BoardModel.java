@@ -92,8 +92,6 @@ public class BoardModel {
             Arrays.fill(row, 0);
     }
 
-
-
     public void setDead(int x, int y) {
         this.board[x][y] = 0;
     }

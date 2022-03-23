@@ -10,9 +10,37 @@ public class FrameModel {
     private int aliveMin = 3;
     private int aliveMax = 3;
     private BooleanProperty playingProperty;
+    private SimpleIntegerProperty defaultFigureSize;
+    private SimpleIntegerProperty defaultBoardSize;
 
     public FrameModel() {
+        this.defaultBoardSize = new SimpleIntegerProperty(200);
+        this.defaultFigureSize = new SimpleIntegerProperty(10);
         this.playingProperty = new SimpleBooleanProperty(false);
+    }
+
+    public boolean isPlayingProperty() {
+        return playingProperty.get();
+    }
+
+    public BooleanProperty playingPropertyProperty() {
+        return playingProperty;
+    }
+
+    public int getDefaultFigureSize() {
+        return defaultFigureSize.get();
+    }
+
+    public SimpleIntegerProperty defaultFigureSizeProperty() {
+        return defaultFigureSize;
+    }
+
+    public int getDefaultBoardSize() {
+        return defaultBoardSize.get();
+    }
+
+    public SimpleIntegerProperty defaultBoardSizeProperty() {
+        return defaultBoardSize;
     }
 
     public int getLonelinessDeath() {

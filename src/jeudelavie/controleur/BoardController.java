@@ -10,6 +10,7 @@ import jeudelavie.vue.BoardView;
 public class BoardController {
     private BoardModel boardModel;
     private BoardView boardView;
+    private BoardController figureController;
 
     private int boardSize;
 
@@ -28,7 +29,6 @@ public class BoardController {
             }
         });
 
-
         this.boardView.setOnDragDetected(dragEvent -> {
             System.out.println("Drag detected");
             // TODO on drag move the canvas
@@ -36,25 +36,26 @@ public class BoardController {
 
         this.boardView.setOnMouseClicked(clickEvent -> {
 
-
             System.out.println("Click detected");
             System.out.println(clickEvent);
-
 
             // TODO refactor
             int cellX = (int) Math.floor((clickEvent.getX() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
             int cellY = (int) Math.floor((clickEvent.getY() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
 
-            if(clickEvent.isShiftDown()){
-                int[][] array = {{1,1,1},{1, 1, 1},{1,1,1}};
-                this.pastFigure(array,3,cellX,cellY);
+            if(clickEvent.isShiftDown() && (figureController != null)){
+
+                //this.pastFigure(figureController,figureController.getBoardModel().getBoardSize(),cellX,cellY);
 
             } else {
                 //boardModel.getBoard()[cellX][cellY] == 0 ?
                         this.inverseCellState(cellX, cellY);
-
             }
         });
+    }
+
+    public void setBoardController(BoardController figureController){
+        this.figureController = figureController;
     }
 
     // TODO

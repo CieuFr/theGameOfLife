@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import jeudelavie.model.BoardModel;
+import jeudelavie.model.FigureModel;
 import jeudelavie.model.FrameModel;
 import jeudelavie.vue.BoardView;
 
@@ -97,11 +98,18 @@ public class FrameController implements Initializable {
 
     @FXML
     protected void onLoadButtonAction() {
-        System.out.println("todo");
+
+        if(figureModel.getPatternFromName(patternLoadingCombo.getValue()) != null){
+            figureController.getBoardModel().setBoard(figureModel.getPatternFromName(patternLoadingCombo.getValue()));
+            figureController.draw();
+        }
+
     }
 
     private FrameModel frameModel;
+    private FigureModel figureModel;
     private BoardController boardController;
+    private BoardController figureController;
 
     public FrameController(FrameModel frameModel) {
         this.frameModel = frameModel;
@@ -110,11 +118,20 @@ public class FrameController implements Initializable {
     public FrameModel getFrameModel() {
         return this.frameModel;
     }
+    public BoardController getBoardController() {
+        return this.boardController;
+    }
 
     public void addBoardController(BoardController boardController) {
         //  TODO !important change from board controller to directly board view cleaner
         this.boardController = boardController;
         this.boardPane.getChildren().add(this.boardController.getBoardView());
+    }
+
+    public void setUpFigureController() {
+        figureController = new BoardController(10);
+        this.figurePane.getChildren().add(this.figureController.getBoardView());
+        figureController.draw();
     }
 
     public void bindNumberOfIterations(){
@@ -123,6 +140,13 @@ public class FrameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        setUpFigureController();
+
+        figureModel = new FigureModel(frameModel.getDefaultFigureSize());
+
+        patternLoadingCombo.getItems().addAll(figureModel.getObservableListOfPatternsName());
+
         this.frameModel.setLonelinessDeath(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem()));
         this.frameModel.setSuffocationDeath(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem()));
         this.frameModel.setAliveMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem()));
@@ -210,8 +234,6 @@ public class FrameController implements Initializable {
                 maxHealthChanging.set(false);
             }
         });
-
-        figurePane.getChildren().add(new BoardView(new BoardController(10),new BoardModel(10)));
     }
 
 
