@@ -136,11 +136,14 @@ public class BoardModel {
         if (zoomRatio > 1)
             this.zoomRatio--;
     }
+
     public void incrementZoomRatio() {
-        this.zoomRatio++;
+        if (zoomRatio < 8)
+            this.zoomRatio++;
     }
 
     public boolean isAlive(int x, int y) {
+
         return this.board[x][y] == 1;
     }
 

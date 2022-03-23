@@ -56,12 +56,13 @@ public class FrameController implements Initializable {
 
     @FXML
     protected void onPlayPauseButtonAction() {
-        System.out.println("todo play pause");
 
         if (this.frameModel.isPlaying()){
+            System.out.println("Pause the game");
             this.frameModel.setPlaying(false);
             playPauseButton.setText("Play");
         }else {
+            System.out.println("Playing the game");
             this.frameModel.setPlaying(true);
             playPauseButton.setText("Pause");
         }

@@ -1,6 +1,8 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -30,14 +32,15 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
 
-        GameTimeLine gameTimeLine = new GameTimeLine(boardController, frameController);
+        GameTimeLine gameTimeLine = new GameTimeLine(boardController, frameController, Duration.millis(100));
 
-        gameTimeLine.setTiming(Duration.seconds(1));
-        gameTimeLine.start();
+        // TODO WTF JAVA ?!?!?!?!?
         frameController.getFrameModel().getPlayingProperty().addListener(listener -> {
-            gameTimeLine.getBooleanProperty().set(!gameTimeLine.getBooleanProperty().get());
+            System.out.println(gameTimeLine.getBooleanProperty());
         });
-        //gameTimeLine.getBooleanProperty().bind(frameController.getFrameModel().getPlayingProperty());
+        //frameController.getFrameModel().getPlayingProperty().bindBidirectional(gameTimeLine.getBooleanProperty());
+        //gameTimeLine.getBooleanProperty().bind(frameController.getFrameModel().getPlayingProperty().and(frameController.getFrameModel().getPlayingProperty()));
+
     }
 
 

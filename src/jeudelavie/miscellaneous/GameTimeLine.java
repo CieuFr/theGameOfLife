@@ -18,10 +18,20 @@ public class GameTimeLine {
     private BoardController boardController;
     private FrameController frameController;
 
-    public GameTimeLine(BoardController boardController, FrameController frameController) {
+    public GameTimeLine(BoardController boardController, FrameController frameController, Duration timing) {
         this.boardController = boardController;
         this.frameController = frameController;
         this.booleanProperty = new SimpleBooleanProperty();
+        this.timing = timing;
+        this.timeline = new Timeline(new KeyFrame(this.timing, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                boardController.computeAndSetNextGeneration(frameController.getFrameModel());
+                System.out.println("drawed");
+            }
+        }));
+        this.timeline.setCycleCount(Timeline.INDEFINITE);
+
         this.booleanProperty.addListener(listener -> {
             System.out.println("set play");
 
@@ -33,21 +43,6 @@ public class GameTimeLine {
                 this.timeline.pause();
             }
         });
-    }
-
-    public void setTiming(Duration timing) {
-        this.timing = timing;
-    }
-
-    public void start() {
-        this.timeline = new Timeline(new KeyFrame(this.timing, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                boardController.computeAndSetNextGeneration(frameController.getFrameModel());
-                System.out.println("drawed");
-            }
-        }));
-        this.timeline.setCycleCount(Timeline.INDEFINITE);
     }
 
     public BooleanProperty getBooleanProperty() {
