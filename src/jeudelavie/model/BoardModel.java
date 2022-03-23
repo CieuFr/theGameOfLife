@@ -1,36 +1,59 @@
 package jeudelavie.model;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class BoardModel {
 
     private int vieMin, vieMax, mortMin, mortMax;
     private int size;
+    private int zoomRatio;
+    private int boardPixelSize;
+
     private int[][] board;
 
-    SimpleIntegerProperty numberOfIterations;
+    IntegerProperty numberOfIterations;
 
+    public BoardModel(int size) {
+        this.size = size;
+        this.zoomRatio = 1;
+        this.board = new int[size][size];
+        // TODO
+        this.numberOfIterations = new SimpleIntegerProperty(0);
+    }
 
     public int getSize() {
         return size;
     }
 
-    public void increaseIterations() {
-       this.numberOfIterations.set(numberOfIterations.get()+1);
+    //todo
+    public int getState(int x, int y) {
+        if (x < 0 || x >= size) {
+            return 0;
+        }
+
+        if (y < 0 || y >= size) {
+            return 0;
+        }
+
+        return this.board[x][y];
     }
+
+    // TODO
+    public void increaseIterations() {
+        this.numberOfIterations.set(numberOfIterations.get() + 1);
+    }
+    // TODO
+
     public void resetIterations() {
         this.numberOfIterations.set(0);
     }
+    // TODO
 
-    public SimpleIntegerProperty getNumberOfIterations() {
+    public IntegerProperty getNumberOfIterations() {
         return numberOfIterations;
     }
 
-    public BoardModel(int size) {
-        this.size = size;
-        this.board = new int[size][size];
-        numberOfIterations = new SimpleIntegerProperty(0);
-    }
 
     public void setAlive(int x, int y) {
         this.board[x][y] = 1;
@@ -78,5 +101,25 @@ public class BoardModel {
 
     public int getBoardSize() {
         return size;
+    }
+
+    public void setBoardPixelWidth(int boardPixelSize) {
+        this.boardPixelSize = boardPixelSize;
+    }
+
+    public int getBoardPixelSize() {
+        return boardPixelSize;
+    }
+
+    public int getZoomRatio() {
+        return this.zoomRatio;
+    }
+
+    public void decrementZoomRatio() {
+        if (zoomRatio > 1)
+            this.zoomRatio--;
+    }
+    public void incrementZoomRatio() {
+        this.zoomRatio++;
     }
 }

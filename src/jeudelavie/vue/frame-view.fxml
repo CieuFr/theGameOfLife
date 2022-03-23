@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="CENTER" fillHeight="false" VBox.vgrow="ALWAYS">
                <children>
-                  <Pane fx:id="boardPane" minHeight="200.0" minWidth="200.0" style="-fx-background-color: #ffffff;" />
+                  <Pane fx:id="boardPane" style="-fx-background-color: #28cf0a;" />
                </children>
             </HBox>
             <HBox alignment="CENTER" maxHeight="200.0" prefHeight="200.0" style="-fx-background-color: white;" VBox.vgrow="NEVER">

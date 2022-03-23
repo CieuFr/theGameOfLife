@@ -1,18 +1,14 @@
 package jeudelavie.controleur;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import jeudelavie.model.FrameModel;
-import jeudelavie.vue.BoardView;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FrameController implements Initializable {
 
@@ -44,7 +40,7 @@ public class FrameController implements Initializable {
     private Button playPauseButton;
 
     @FXML
-    protected void onPlayPauseButtonAction(){
+    protected void onPlayPauseButtonAction() {
         System.out.println("todo play pause");
         playPauseButton.setText("Pause");
     }
@@ -53,8 +49,8 @@ public class FrameController implements Initializable {
     private Button resetButton;
 
     @FXML
-    protected void onResetButtonAction(){
-        boardView.getBoardModel().resetIterations();
+    protected void onResetButtonAction() {
+        //boardView.getBoardModel().resetIterations();
 
         System.out.println("TODO reset ");
     }
@@ -63,15 +59,15 @@ public class FrameController implements Initializable {
     private Button nextGenerationButton;
 
     @FXML
-    protected void onNextGenerationButtonAction(){
-        boardView.getBoardController().computeNextGeneration();
+    protected void onNextGenerationButtonAction() {
+        //boardView.getBoardController().computeNextGeneration();
     }
 
     @FXML
     private Button randomizeButton;
 
     @FXML
-    protected void onRandomizeButtonAction(){
+    protected void onRandomizeButtonAction() {
         System.out.println("TODO randomize ");
     }
 
@@ -79,7 +75,7 @@ public class FrameController implements Initializable {
     private Button quitButton;
 
     @FXML
-    protected void onQuitButtonAction(){
+    protected void onQuitButtonAction() {
         System.exit(0);
     }
 
@@ -87,7 +83,7 @@ public class FrameController implements Initializable {
     private Button loadButton;
 
     @FXML
-    protected void onLoadButtonAction(){
+    protected void onLoadButtonAction() {
         System.out.println("todo");
     }
 
@@ -95,36 +91,22 @@ public class FrameController implements Initializable {
     private Label iterationsLabel;
 
     private FrameModel frameModel;
-    public FrameController(BoardView boardView){
-        this.boardView = boardView;
-        this.frameModel = new FrameModel(10);
+
+
+    public FrameController() {
     }
 
 
+    private BoardController boardController;
 
-    private BoardView boardView;
-
-    public void addBoardView(BoardView boardView) {
-        this.boardView = boardView;
-        this.boardPane.getChildren().add(boardView);
-
-        this.boardPane.setOnScroll(scrollEvent -> {
-            double deltaY = scrollEvent.getDeltaY();
-            if (deltaY < 0) {
-                this.boardView.getBoardController().zoomOut();
-            } else {
-                this.boardView.getBoardController().zoomIn();
-            }
-        });
-
-        this.boardPane.setOnDragDetected(dragEvent -> {
-            System.out.println(dragEvent);
-        });
+    public void addBoardController(BoardController boardController) {
+        this.boardController = boardController;
+        this.boardPane.getChildren().add(this.boardController.getBoardView());
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        boardView.getBoardModel().setMortMin(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem().toString()));
+        /*boardView.getBoardModel().setMortMin(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem().toString()));
         boardView.getBoardModel().setMortMax(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem().toString()));
         boardView.getBoardModel().setVieMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem().toString()));
         boardView.getBoardModel().setVieMax(Integer.parseInt(maxHealthCombo.getSelectionModel().getSelectedItem().toString()));
@@ -135,9 +117,9 @@ public class FrameController implements Initializable {
         AtomicBoolean maxHealthChanging = new AtomicBoolean(false);
 
         lonelinessDeathCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if(!lonelinessChanging.get()){
+            if (!lonelinessChanging.get()) {
                 lonelinessChanging.set(true);
-                if((Integer.parseInt((String) newValue) > boardView.getBoardModel().getMortMax())){
+                if ((Integer.parseInt((String) newValue) > boardView.getBoardModel().getMortMax())) {
                     alertGenerationError("Loneliness can't be above suffocation");
                     lonelinessDeathCombo.getSelectionModel().select(oldValue);
                 } else {
@@ -153,9 +135,9 @@ public class FrameController implements Initializable {
 
         });
         suffocationDeathCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if(!suffocationChanging.get()){
+            if (!suffocationChanging.get()) {
                 suffocationChanging.set(true);
-                if((Integer.parseInt((String) newValue) < boardView.getBoardModel().getMortMin())){
+                if ((Integer.parseInt((String) newValue) < boardView.getBoardModel().getMortMin())) {
                     alertGenerationError("Suffocation can't be bellow loneliness");
                     suffocationDeathCombo.getSelectionModel().select(oldValue);
                 } else {
@@ -172,9 +154,9 @@ public class FrameController implements Initializable {
 
         });
         minHealthCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if(!minHealthChanging.get()){
+            if (!minHealthChanging.get()) {
                 minHealthChanging.set(true);
-                if((Integer.parseInt((String) newValue) > boardView.getBoardModel().getVieMax())){
+                if ((Integer.parseInt((String) newValue) > boardView.getBoardModel().getVieMax())) {
                     alertGenerationError("Minimum value can't be above Max value");
                     minHealthCombo.getSelectionModel().select(oldValue);
                 } else {
@@ -192,9 +174,9 @@ public class FrameController implements Initializable {
 
         });
         maxHealthCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if(!maxHealthChanging.get()){
+            if (!maxHealthChanging.get()) {
                 maxHealthChanging.set(true);
-                if((Integer.parseInt((String) newValue) < boardView.getBoardModel().getVieMin())){
+                if ((Integer.parseInt((String) newValue) < boardView.getBoardModel().getVieMin())) {
                     alertGenerationError("Max value can't be bellow min value");
                     maxHealthCombo.getSelectionModel().select(oldValue);
                 } else {
@@ -220,11 +202,11 @@ public class FrameController implements Initializable {
 
             }
         });
-
+*/
     }
 
 
-    private ButtonType alertGenerationConfirmation(){
+    private ButtonType alertGenerationConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Changing values");
         alert.setHeaderText("Do you want to proceed with the changes ?");
@@ -232,7 +214,8 @@ public class FrameController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         return result.orElse(ButtonType.CANCEL);
     }
-    private void alertGenerationError(String text){
+
+    private void alertGenerationError(String text) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Changing values");
         alert.setHeaderText(text);

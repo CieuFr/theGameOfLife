@@ -1,75 +1,90 @@
 package jeudelavie.controleur;
 
-import jeudelavie.miscellaneous.Cell;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.Affine;
 import jeudelavie.model.BoardModel;
-import jeudelavie.model.BoardModelOld;
 import jeudelavie.vue.BoardView;
 
-import java.time.Duration;
 import java.time.Instant;
 
 public class BoardController {
-    private BoardModelOld boardModelOld;
     private BoardModel boardModel;
-    private boolean isPaused;
-
     private BoardView boardView;
 
+    private boolean isPaused;
+    private int boardSize;
+
     public BoardController(int boardSize) {
-        this.boardModelOld = new BoardModelOld(this, boardSize);
+        this.boardSize = boardSize;
         this.boardModel = new BoardModel(boardSize);
-        this.boardView = new BoardView(this, this.boardModelOld,this.boardModel);
-    }
+        this.boardView = new BoardView(this, this.boardModel);
 
-    public void zoomIn(){
-        System.out.println("zoom in");
-        System.out.println(this.boardModelOld.getCellSize());
-
-        this.boardModelOld.setCellSize(this.boardModelOld.getCellSize()+1);
-        resizeCells();
-    }
-    public void zoomOut(){
-        System.out.println("zoom out");
-        this.boardModelOld.setCellSize(this.boardModelOld.getCellSize()-1);
-        System.out.println(this.boardModelOld.getCellSize());
-
-        resizeCells();
-    }
-
-    private void resizeCells() {
-        Instant start = Instant.now();
-        int cellSize = this.boardModelOld.getCellSize();
-        for (int x = 0; x < this.boardModelOld.getBoardSize(); x++) {
-            for (int y = 0; y < this.boardModelOld.getBoardSize(); y++) {
-                Cell cell = this.boardModelOld.getCellsMatrix()[x][y];
-                cell.setStyle("-fx-background-color: #39ff00;");
-                cell.setSize(cellSize);
-                //cell.setStyle("-fx-background-color: #ffffff;");
+        this.boardView.setOnScroll(scrollEvent -> {
+            double deltaY = scrollEvent.getDeltaY();
+            // TODO on zoom make the "selected" cell the center of the newly zoomed canvas
+            if (deltaY < 0) {
+                this.zoomOut();
+            } else {
+                this.zoomIn();
             }
-        }
-        Instant end = Instant.now();
-        System.out.println(Duration.between(start, end));
+        });
+
+
+        this.boardView.setOnDragDetected(dragEvent -> {
+            System.out.println("Drag detected");
+            // TODO on drag move the canvas
+        });
+
+        this.boardView.setOnMouseClicked(clickEvent -> {
+            System.out.println("Click detected");
+            System.out.println(clickEvent);
+
+            // TODO refactor
+            int cellX = (int) Math.floor((clickEvent.getX() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
+            int cellY = (int) Math.floor((clickEvent.getY() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
+
+            this.setAlive(cellX, cellY);
+        });
+    }
+
+    // TODO
+    public void zoomIn() {
+        System.out.println("zoom in");
+        this.boardModel.incrementZoomRatio();
+
+        System.out.println(this.boardModel.getZoomRatio());
+
+        draw();
+    }
+
+    // TODO
+    public void zoomOut() {
+        System.out.println("zoom out");
+        this.boardModel.decrementZoomRatio();
+
+        System.out.println(this.boardModel.getZoomRatio());
+
+        draw();
     }
 
 
-    public void computeNextGeneration(){
-        for(int i = 0; i < boardModel.getBoardSize(); i++){
-            for( int j = 0 ; j < boardModel.getBoardSize() ; j++){
+    // TODO
+    public void computeNextGeneration() {
+        for (int i = 0; i < boardModel.getBoardSize(); i++) {
+            for (int j = 0; j < boardModel.getBoardSize(); j++) {
                 int aliveCells = 0;
-                for(int iNearCells = -1; iNearCells < 2; iNearCells++){
-                    for( int jNearCells = -1 ; jNearCells < 2 ; jNearCells++) {
-                       aliveCells += ((i+iNearCells < 0)||(j+jNearCells < 0) || (i+iNearCells > boardModel.getSize()-1) || (j+jNearCells > boardModel.getSize()-1) ) ? 0 :boardModel.getBoard()[i+iNearCells][j+jNearCells] ;
+                for (int iNearCells = -1; iNearCells < 2; iNearCells++) {
+                    for (int jNearCells = -1; jNearCells < 2; jNearCells++) {
+                        aliveCells += ((i + iNearCells < 0) || (j + jNearCells < 0) || (i + iNearCells > boardModel.getSize() - 1) || (j + jNearCells > boardModel.getSize() - 1)) ? 0 : boardModel.getBoard()[i + iNearCells][j + jNearCells];
                     }
                 }
-                aliveCells -=  boardModel.getBoard()[i][j];
+                aliveCells -= boardModel.getBoard()[i][j];
 
-                if((boardModel.getBoard()[i][j] == 1) && (aliveCells >= boardModel.getMortMin()) && (aliveCells <= boardModel.getMortMax()))
-                {
-                    boardModel.setDead(i,j);
-                }
-                else if ((boardModel.getBoard()[i][j] == 0) && (aliveCells >= boardModel.getVieMin()) && (aliveCells <= boardModel.getMortMax()))
-                {
-                    boardModel.setAlive(i,j);
+                if ((boardModel.getBoard()[i][j] == 1) && (aliveCells >= boardModel.getMortMin()) && (aliveCells <= boardModel.getMortMax())) {
+                    boardModel.setDead(i, j);
+                } else if ((boardModel.getBoard()[i][j] == 0) && (aliveCells >= boardModel.getVieMin()) && (aliveCells <= boardModel.getMortMax())) {
+                    boardModel.setAlive(i, j);
                 }
             }
         }
@@ -78,21 +93,47 @@ public class BoardController {
         boardModel.increaseIterations();
     }
 
-    public void pastFigure(int[][] figure, int figureSize, int x, int y ) {
-        for (int i = 0; i < figureSize; i++) {
-            for (int j = 0; j < figureSize; j++) {
-                boardModel.getBoard()[x + i][y + j] = figure[i][j];
-            }
+    public void draw() {
+        GraphicsContext graphicsContext = this.boardView.getGraphicsContext2D();
+        Affine affine = new Affine();
+        this.boardView.setWidth(this.boardModel.getBoardPixelSize() * this.boardModel.getZoomRatio());
+        this.boardView.setHeight(this.boardModel.getBoardPixelSize() * this.boardModel.getZoomRatio());
 
+        affine.appendScale(this.boardModel.getBoardPixelSize() / this.boardSize * this.boardModel.getZoomRatio(), this.boardModel.getBoardPixelSize() / this.boardSize * this.boardModel.getZoomRatio());
+
+        graphicsContext.setTransform(affine);
+        graphicsContext.setFill(Color.LIGHTGRAY);
+        graphicsContext.fillRect(0, 0, this.boardSize, this.boardSize);
+        graphicsContext.setFill(Color.BLACK);
+        for (int x = 0; x < this.boardSize; x++) {
+            for (int y = 0; y < this.boardSize; y++) {
+                if (this.boardModel.getState(x, y) == 1) {
+                    graphicsContext.fillRect(x, y, 1, 1);
+                }
+            }
         }
+        graphicsContext.setStroke(Color.GRAY);
+        graphicsContext.setLineWidth(0.05);
+        for (int x = 0; x <= this.boardSize; x++) {
+            graphicsContext.strokeLine(x, 0, x, boardSize);
+        }
+
+        for (int y = 0; y <= this.boardSize; y++) {
+            graphicsContext.strokeLine(0, y, boardSize, y);
+        }
+
     }
 
-    
     public BoardModel getBoardModel() {
         return boardModel;
     }
 
     public BoardView getBoardView() {
         return boardView;
+    }
+
+    public void setAlive(int cellX, int cellY) {
+        this.boardModel.setAlive(cellX, cellY);
+        draw();
     }
 }
