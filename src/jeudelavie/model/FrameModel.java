@@ -1,12 +1,17 @@
 package jeudelavie.model;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 public class FrameModel {
     private int lonelinessDeath = 1;
     private int suffocationDeath = 4;
     private int aliveMin = 3;
     private int aliveMax = 3;
+    private BooleanProperty playing;
 
     public FrameModel() {
+        this.playing = new SimpleBooleanProperty(false);
     }
 
     public int getLonelinessDeath() {
@@ -39,5 +44,13 @@ public class FrameModel {
 
     public void setAliveMax(int aliveMax) {
         this.aliveMax = aliveMax;
+    }
+
+    public BooleanProperty getPlayingProperty() {
+        return playing;
+    }
+
+    public void setPlaying(boolean state) {
+        this.playing.set(state);
     }
 }

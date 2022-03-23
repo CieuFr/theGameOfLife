@@ -59,6 +59,7 @@ public class FrameController implements Initializable {
     @FXML
     protected void onPlayPauseButtonAction() {
         System.out.println("todo play pause");
+        this.frameModel.setPlaying(true);
         playPauseButton.setText("Pause");
     }
 
@@ -72,8 +73,7 @@ public class FrameController implements Initializable {
     @FXML
     protected void onNextGenerationButtonAction() {
         System.out.println("nexted");
-        boardController.computeNextGeneration(this.frameModel);
-        boardController.draw();
+        boardController.computeAndSetNextGeneration(this.frameModel);
     }
 
     @FXML
@@ -96,6 +96,10 @@ public class FrameController implements Initializable {
 
     public FrameController(FrameModel frameModel) {
         this.frameModel = frameModel;
+    }
+
+    public FrameModel getFrameModel() {
+        return frameModel;
     }
 
     public void addBoardController(BoardController boardController) {

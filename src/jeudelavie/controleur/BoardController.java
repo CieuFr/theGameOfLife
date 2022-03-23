@@ -7,13 +7,10 @@ import jeudelavie.model.BoardModel;
 import jeudelavie.model.FrameModel;
 import jeudelavie.vue.BoardView;
 
-import java.time.Instant;
-
 public class BoardController {
     private BoardModel boardModel;
     private BoardView boardView;
 
-    private boolean isPaused;
     private int boardSize;
 
     public BoardController(int boardSize) {
@@ -71,17 +68,12 @@ public class BoardController {
 
 
     // TODO
-    public void computeNextGeneration(FrameModel frameModel) {
+    public int[][] computeNextGeneration(FrameModel frameModel) {
         int[][] newBoard = new int[this.boardSize][this.boardSize];
-        System.out.println("*-*--*-*-*-*-*-*-*-*-*-*-*");
-        System.out.println(frameModel.getLonelinessDeath());
-        System.out.println(frameModel.getSuffocationDeath());
-        System.out.println(frameModel.getAliveMin());
-        System.out.println(frameModel.getAliveMax());
-        System.out.println("*-*--*-*-*-*-*-*-*-*-*-*-*");
+
         for (int x = 0; x < this.boardSize; x++) {
             for (int y = 0; y < this.boardSize; y++) {
-                int aliveNeighbours = boardModel.countAliveNeighbours(x, y);    
+                int aliveNeighbours = boardModel.countAliveNeighbours(x, y);
                 if (boardModel.getState(x, y) == 1) {
                     if (aliveNeighbours >= frameModel.getSuffocationDeath()) {
                         newBoard[x][y] = 0;
@@ -113,10 +105,20 @@ public class BoardController {
                 }*/
             }
         }
+        // TODO revert to directly modify board
+
+        return newBoard;
+
+    }
+
+    public void computeAndSetNextGeneration(FrameModel frameModel) {
+        int[][] newBoard = computeNextGeneration(frameModel);
+
         this.boardModel.setBoard(newBoard);
-        System.out.println("fini it");
+
         System.out.println(boardModel.getNumberOfIterations().toString());
         boardModel.increaseIterations();
+        draw();
     }
 
     public void draw() {
