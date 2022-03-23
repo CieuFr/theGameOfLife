@@ -8,10 +8,10 @@ public class FrameModel {
     private int suffocationDeath = 4;
     private int aliveMin = 3;
     private int aliveMax = 3;
-    private BooleanProperty playing;
+    private BooleanProperty playingProperty;
 
     public FrameModel() {
-        this.playing = new SimpleBooleanProperty(false);
+        this.playingProperty = new SimpleBooleanProperty(false);
     }
 
     public int getLonelinessDeath() {
@@ -47,10 +47,14 @@ public class FrameModel {
     }
 
     public BooleanProperty getPlayingProperty() {
-        return playing;
+        return this.playingProperty;
     }
 
     public void setPlaying(boolean state) {
-        this.playing.set(state);
+        this.playingProperty.set(state);
+    }
+
+    public boolean isPlaying() {
+        return this.playingProperty.get();
     }
 }

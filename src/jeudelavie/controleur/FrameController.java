@@ -1,6 +1,5 @@
 package jeudelavie.controleur;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,7 +9,6 @@ import jeudelavie.model.FrameModel;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FrameController implements Initializable {
 
@@ -59,8 +57,14 @@ public class FrameController implements Initializable {
     @FXML
     protected void onPlayPauseButtonAction() {
         System.out.println("todo play pause");
-        this.frameModel.setPlaying(true);
-        playPauseButton.setText("Pause");
+
+        if (this.frameModel.isPlaying()){
+            this.frameModel.setPlaying(false);
+            playPauseButton.setText("Play");
+        }else {
+            this.frameModel.setPlaying(true);
+            playPauseButton.setText("Pause");
+        }
     }
 
     @FXML
@@ -72,7 +76,6 @@ public class FrameController implements Initializable {
 
     @FXML
     protected void onNextGenerationButtonAction() {
-        System.out.println("nexted");
         boardController.computeAndSetNextGeneration(this.frameModel);
     }
 
@@ -99,7 +102,7 @@ public class FrameController implements Initializable {
     }
 
     public FrameModel getFrameModel() {
-        return frameModel;
+        return this.frameModel;
     }
 
     public void addBoardController(BoardController boardController) {

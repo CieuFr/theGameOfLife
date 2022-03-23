@@ -21,14 +21,16 @@ public class GameTimeLine {
     public GameTimeLine(BoardController boardController, FrameController frameController) {
         this.boardController = boardController;
         this.frameController = frameController;
-        this.booleanProperty = new SimpleBooleanProperty(false);
-        this.booleanProperty.addListener(event -> {
+        this.booleanProperty = new SimpleBooleanProperty();
+        this.booleanProperty.addListener(listener -> {
+            System.out.println("set play");
+
             if (this.booleanProperty.get()) {
-                System.out.println("stop");
+                System.out.println("play");
                 this.timeline.play();
             } else {
-                System.out.println("play");
-                this.timeline.stop();
+                System.out.println("pause");
+                this.timeline.pause();
             }
         });
     }
@@ -46,11 +48,10 @@ public class GameTimeLine {
             }
         }));
         this.timeline.setCycleCount(Timeline.INDEFINITE);
-        //this.timeline.stop();
     }
 
     public BooleanProperty getBooleanProperty() {
-        return booleanProperty;
+        return this.booleanProperty;
     }
 
 }

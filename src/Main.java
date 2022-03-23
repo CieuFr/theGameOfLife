@@ -34,6 +34,9 @@ public class Main extends Application {
 
         gameTimeLine.setTiming(Duration.seconds(1));
         gameTimeLine.start();
+        frameController.getFrameModel().getPlayingProperty().addListener(listener -> {
+            gameTimeLine.getBooleanProperty().set(!gameTimeLine.getBooleanProperty().get());
+        });
         //gameTimeLine.getBooleanProperty().bind(frameController.getFrameModel().getPlayingProperty());
     }
 
