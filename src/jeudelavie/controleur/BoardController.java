@@ -191,4 +191,9 @@ public class BoardController {
         this.boardModel.inverseState(cellX, cellY);
         draw();
     }
+
+    public void resetBoard() {
+        this.boardModel.resetBoard();
+        draw();
+    }
 }

@@ -77,9 +77,7 @@ public class FrameController implements Initializable {
 
     @FXML
     protected void onResetButtonAction() {
-        //boardView.getBoardModel().resetIterations();
-
-        System.out.println("TODO reset ");
+       this.boardController.resetBoard();
     }
 
     @FXML

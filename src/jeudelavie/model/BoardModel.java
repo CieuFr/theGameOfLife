@@ -3,6 +3,8 @@ package jeudelavie.model;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+import java.util.Arrays;
+
 public class BoardModel {
 
     private int vieMin, vieMax, mortMin, mortMax;
@@ -82,6 +84,12 @@ public class BoardModel {
         } else {
             this.board[x][y] = 1;
         }
+    }
+
+    public void resetBoard(){
+        this.resetIterations();
+        for (int[] row: this.board)
+            Arrays.fill(row, 0);
     }
 
 
