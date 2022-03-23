@@ -39,6 +39,23 @@ public class BoardModel {
         return this.board[x][y];
     }
 
+    public int countAliveNeighbours(int x, int y) {
+        int count = 0;
+
+        count += getState(x - 1, y - 1);
+        count += getState(x, y - 1);
+        count += getState(x + 1, y - 1);
+
+        count += getState(x - 1, y);
+        count += getState(x + 1, y);
+
+        count += getState(x - 1, y + 1);
+        count += getState(x, y + 1);
+        count += getState(x + 1, y + 1);
+
+        return count;
+    }
+
     // TODO
     public void increaseIterations() {
         this.numberOfIterations.set(numberOfIterations.get() + 1);
@@ -121,5 +138,17 @@ public class BoardModel {
     }
     public void incrementZoomRatio() {
         this.zoomRatio++;
+    }
+
+    public boolean isAlive(int x, int y) {
+        return this.board[x][y] == 1;
+    }
+
+    public boolean isDead(int x, int y) {
+        return this.board[x][y] == 0;
+    }
+
+    public void setBoard(int[][] newBoard) {
+        this.board = newBoard;
     }
 }

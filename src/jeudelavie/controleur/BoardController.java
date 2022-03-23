@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import jeudelavie.model.BoardModel;
+import jeudelavie.model.FrameModel;
 import jeudelavie.vue.BoardView;
 
 import java.time.Instant;
@@ -70,10 +71,34 @@ public class BoardController {
 
 
     // TODO
-    public void computeNextGeneration() {
-        for (int i = 0; i < boardModel.getBoardSize(); i++) {
-            for (int j = 0; j < boardModel.getBoardSize(); j++) {
-                int aliveCells = 0;
+    public void computeNextGeneration(FrameModel frameModel) {
+        int[][] newBoard = new int[this.boardSize][this.boardSize];
+        System.out.println("*-*--*-*-*-*-*-*-*-*-*-*-*");
+        System.out.println(frameModel.getLonelinessDeath());
+        System.out.println(frameModel.getSuffocationDeath());
+        System.out.println(frameModel.getAliveMin());
+        System.out.println(frameModel.getAliveMax());
+        System.out.println("*-*--*-*-*-*-*-*-*-*-*-*-*");
+        for (int x = 0; x < this.boardSize; x++) {
+            for (int y = 0; y < this.boardSize; y++) {
+                int aliveNeighbours = boardModel.countAliveNeighbours(x, y);    
+                if (boardModel.getState(x, y) == 1) {
+                    if (aliveNeighbours >= frameModel.getSuffocationDeath()) {
+                        newBoard[x][y] = 0;
+                    } else if (aliveNeighbours <= frameModel.getLonelinessDeath()) {
+                        newBoard[x][y] = 0;
+                    } else {
+                        newBoard[x][y] = 1;
+                    }
+                } else {
+                    if (aliveNeighbours == frameModel.getAliveMin() && aliveNeighbours <= frameModel.getAliveMax()) {
+                        newBoard[x][y] = 1;
+                    } else {
+                        newBoard[x][y] = 0;
+                    }
+                }
+
+                /*int aliveCells = 0;
                 for (int iNearCells = -1; iNearCells < 2; iNearCells++) {
                     for (int jNearCells = -1; jNearCells < 2; jNearCells++) {
                         aliveCells += ((i + iNearCells < 0) || (j + jNearCells < 0) || (i + iNearCells > boardModel.getSize() - 1) || (j + jNearCells > boardModel.getSize() - 1)) ? 0 : boardModel.getBoard()[i + iNearCells][j + jNearCells];
@@ -85,9 +110,10 @@ public class BoardController {
                     boardModel.setDead(i, j);
                 } else if ((boardModel.getBoard()[i][j] == 0) && (aliveCells >= boardModel.getVieMin()) && (aliveCells <= boardModel.getMortMax())) {
                     boardModel.setAlive(i, j);
-                }
+                }*/
             }
         }
+        this.boardModel.setBoard(newBoard);
         System.out.println("fini it");
         System.out.println(boardModel.getNumberOfIterations().toString());
         boardModel.increaseIterations();

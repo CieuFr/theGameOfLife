@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import jeudelavie.controleur.BoardController;
 import jeudelavie.controleur.FrameController;
+import jeudelavie.model.FrameModel;
 
 public class Main extends Application {
 
@@ -13,7 +14,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         BoardController boardController = new BoardController(20);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/jeudelavie/vue/frame-view.fxml"));
-        fxmlLoader.setController(new FrameController());
+        fxmlLoader.setController(new FrameController(new FrameModel()));
         AnchorPane root = fxmlLoader.load();
         FrameController frameController = fxmlLoader.getController();
         frameController.addBoardController(boardController);

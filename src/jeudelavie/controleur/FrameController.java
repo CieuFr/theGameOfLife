@@ -1,5 +1,6 @@
 package jeudelavie.controleur;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -9,6 +10,7 @@ import jeudelavie.model.FrameModel;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FrameController implements Initializable {
 
@@ -16,22 +18,19 @@ public class FrameController implements Initializable {
     private Pane boardPane;
 
     @FXML
-    private ComboBox patternLoadingCombo;
+    private ComboBox<String> patternLoadingCombo;
 
     @FXML
-    private ComboBox lonelinessDeathCombo;
+    private ComboBox<String> lonelinessDeathCombo;
 
     @FXML
-    private ComboBox suffocationDeathCombo;
-
-
-    @FXML
-    private ComboBox minHealthCombo;
-
+    private ComboBox<String> suffocationDeathCombo;
 
     @FXML
-    private ComboBox maxHealthCombo;
+    private ComboBox<String> minHealthCombo;
 
+    @FXML
+    private ComboBox<String> maxHealthCombo;
 
     @FXML
     private TextField boardSizeTextField;
@@ -40,13 +39,28 @@ public class FrameController implements Initializable {
     private Button playPauseButton;
 
     @FXML
+    private Button resetButton;
+
+    @FXML
+    private Button nextGenerationButton;
+
+    @FXML
+    private Button randomizeButton;
+
+    @FXML
+    private Button quitButton;
+
+    @FXML
+    private Button loadButton;
+
+    @FXML
+    private Label iterationsLabel;
+
+    @FXML
     protected void onPlayPauseButtonAction() {
         System.out.println("todo play pause");
         playPauseButton.setText("Pause");
     }
-
-    @FXML
-    private Button resetButton;
 
     @FXML
     protected void onResetButtonAction() {
@@ -56,15 +70,11 @@ public class FrameController implements Initializable {
     }
 
     @FXML
-    private Button nextGenerationButton;
-
-    @FXML
     protected void onNextGenerationButtonAction() {
-        //boardView.getBoardController().computeNextGeneration();
+        System.out.println("nexted");
+        boardController.computeNextGeneration(this.frameModel);
+        boardController.draw();
     }
-
-    @FXML
-    private Button randomizeButton;
 
     @FXML
     protected void onRandomizeButtonAction() {
@@ -72,137 +82,97 @@ public class FrameController implements Initializable {
     }
 
     @FXML
-    private Button quitButton;
-
-    @FXML
     protected void onQuitButtonAction() {
         System.exit(0);
     }
-
-    @FXML
-    private Button loadButton;
 
     @FXML
     protected void onLoadButtonAction() {
         System.out.println("todo");
     }
 
-    @FXML
-    private Label iterationsLabel;
-
     private FrameModel frameModel;
-
-
-    public FrameController() {
-    }
-
-
     private BoardController boardController;
 
+    public FrameController(FrameModel frameModel) {
+        this.frameModel = frameModel;
+    }
+
     public void addBoardController(BoardController boardController) {
+        //  TODO !important change from board controller to directly board view cleaner
         this.boardController = boardController;
         this.boardPane.getChildren().add(this.boardController.getBoardView());
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        /*boardView.getBoardModel().setMortMin(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem().toString()));
-        boardView.getBoardModel().setMortMax(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem().toString()));
-        boardView.getBoardModel().setVieMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem().toString()));
-        boardView.getBoardModel().setVieMax(Integer.parseInt(maxHealthCombo.getSelectionModel().getSelectedItem().toString()));
-        iterationsLabel.textProperty().bind(boardView.getBoardModel().getNumberOfIterations().asString());
-        AtomicBoolean lonelinessChanging = new AtomicBoolean(false);
-        AtomicBoolean suffocationChanging = new AtomicBoolean(false);
-        AtomicBoolean minHealthChanging = new AtomicBoolean(false);
-        AtomicBoolean maxHealthChanging = new AtomicBoolean(false);
+        this.frameModel.setLonelinessDeath(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem()));
+        this.frameModel.setSuffocationDeath(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem()));
+        this.frameModel.setAliveMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem()));
+        this.frameModel.setAliveMax(Integer.parseInt(maxHealthCombo.getSelectionModel().getSelectedItem()));
+
+        //iterationsLabel.textProperty().bind(this.frameModel.getNumberOfIterations().asString());
 
         lonelinessDeathCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if (!lonelinessChanging.get()) {
-                lonelinessChanging.set(true);
-                if ((Integer.parseInt((String) newValue) > boardView.getBoardModel().getMortMax())) {
-                    alertGenerationError("Loneliness can't be above suffocation");
-                    lonelinessDeathCombo.getSelectionModel().select(oldValue);
+            if ((Integer.parseInt(newValue) >= this.frameModel.getSuffocationDeath())) {
+                alertGenerationError("Loneliness can't be above or equal to suffocation");
+                //TODO Revert selected choice
+                //lonelinessDeathCombo.getSelectionModel().select("1");
+            } else {
+                ButtonType button = alertGenerationConfirmation();
+                if (button == ButtonType.OK) {
+                    this.frameModel.setLonelinessDeath(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem()));
                 } else {
-                    ButtonType button = alertGenerationConfirmation();
-                    if (button == ButtonType.OK) {
-                        boardView.getBoardModel().setMortMin(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem().toString()));
-                    } else {
-                        lonelinessDeathCombo.getSelectionModel().select(oldValue);
-                    }
+                    //TODO Revert selected choice
+                    //lonelinessDeathCombo.getSelectionModel().select(oldValue);
                 }
-                lonelinessChanging.set(false);
             }
-
         });
         suffocationDeathCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if (!suffocationChanging.get()) {
-                suffocationChanging.set(true);
-                if ((Integer.parseInt((String) newValue) < boardView.getBoardModel().getMortMin())) {
-                    alertGenerationError("Suffocation can't be bellow loneliness");
-                    suffocationDeathCombo.getSelectionModel().select(oldValue);
+            if ((Integer.parseInt(newValue) <= this.frameModel.getLonelinessDeath())) {
+                alertGenerationError("Suffocation can't be bellow or equal to loneliness");
+                //TODO Revert selected choice
+                //suffocationDeathCombo.getSelectionModel().select(oldValue);
+            } else {
+                ButtonType button = alertGenerationConfirmation();
+                if (button == ButtonType.OK) {
+                    this.frameModel.setSuffocationDeath(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem()));
                 } else {
-                    ButtonType button = alertGenerationConfirmation();
-                    if (button == ButtonType.OK) {
-                        boardView.getBoardModel().setMortMax(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem().toString()));
-                    } else {
-                        suffocationDeathCombo.getSelectionModel().select(oldValue);
-                    }
+                    //TODO Revert selected choice
+                    //suffocationDeathCombo.getSelectionModel().select(oldValue);
                 }
-
-                suffocationChanging.set(false);
             }
-
         });
         minHealthCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if (!minHealthChanging.get()) {
-                minHealthChanging.set(true);
-                if ((Integer.parseInt((String) newValue) > boardView.getBoardModel().getVieMax())) {
-                    alertGenerationError("Minimum value can't be above Max value");
-                    minHealthCombo.getSelectionModel().select(oldValue);
+            if ((Integer.parseInt(newValue) >= this.frameModel.getAliveMax())) {
+                alertGenerationError("Minimum value can't be above or equal to Max value");
+                //TODO Revert selected choice
+                //minHealthCombo.getSelectionModel().select(oldValue);
+            } else {
+                ButtonType button = alertGenerationConfirmation();
+                if (button == ButtonType.OK) {
+                    this.frameModel.setAliveMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem()));
                 } else {
-                    ButtonType button = alertGenerationConfirmation();
-                    if (button == ButtonType.OK) {
-                        boardView.getBoardModel().setVieMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem().toString()));
-                    } else {
-                        minHealthCombo.getSelectionModel().select(oldValue);
-                    }
+                    //TODO Revert selected choice
+                    //minHealthCombo.getSelectionModel().select(oldValue);
                 }
-
-
-                minHealthChanging.set(false);
             }
-
         });
         maxHealthCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if (!maxHealthChanging.get()) {
-                maxHealthChanging.set(true);
-                if ((Integer.parseInt((String) newValue) < boardView.getBoardModel().getVieMin())) {
-                    alertGenerationError("Max value can't be bellow min value");
-                    maxHealthCombo.getSelectionModel().select(oldValue);
+            if ((Integer.parseInt(newValue) <= this.frameModel.getAliveMin())) {
+                alertGenerationError("Max value can't be bellow or equal to min value");
+                //TODO Revert selected choice
+                //maxHealthCombo.getSelectionModel().select(oldValue);
+            } else {
+                ButtonType button = alertGenerationConfirmation();
+                if (button == ButtonType.OK) {
+                    this.frameModel.setAliveMax(Integer.parseInt(maxHealthCombo.getSelectionModel().getSelectedItem().toString()));
                 } else {
-                    ButtonType button = alertGenerationConfirmation();
-                    if (button == ButtonType.OK) {
-                        boardView.getBoardModel().setVieMax(Integer.parseInt(maxHealthCombo.getSelectionModel().getSelectedItem().toString()));
-                    } else {
-                        maxHealthCombo.getSelectionModel().select(oldValue);
-
-                    }
+                    //TODO Revert selected choice
+                    //maxHealthCombo.getSelectionModel().select(oldValue);
                 }
-
-                maxHealthChanging.set(false);
-            }
-
-
-        });
-
-        maxHealthCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-
             }
         });
-*/
     }
 
 
