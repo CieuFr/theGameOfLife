@@ -16,6 +16,8 @@ import jeudelavie.miscellaneous.ComputeService;
 import jeudelavie.miscellaneous.GameTimeLine;
 import jeudelavie.model.FrameModel;
 
+import java.util.Locale;
+
 public class Main extends Application {
 
     @Override
@@ -29,20 +31,25 @@ public class Main extends Application {
         boardController.draw();
 
         primaryStage.setTitle("The Game Of Life");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.show();
 
         GameTimeLine gameTimeLine = new GameTimeLine(boardController, frameController, Duration.millis(100));
 
-        // TODO WTF JAVA ?!?!?!?!?
-        frameController.getFrameModel().getPlayingProperty().addListener(listener -> {
+        //test(null);
+
+
+        // TODO WTF JAVA ?!?!?!?!? 
+        /*frameController.getFrameModel().getPlayingProperty().addListener(listener -> {
             System.out.println(gameTimeLine.getBooleanProperty());
-        });
+        });*/
         //frameController.getFrameModel().getPlayingProperty().bindBidirectional(gameTimeLine.getBooleanProperty());
-        //gameTimeLine.getBooleanProperty().bind(frameController.getFrameModel().getPlayingProperty().and(frameController.getFrameModel().getPlayingProperty()));
+        gameTimeLine.getBooleanProperty().bind(frameController.getFrameModel().getPlayingProperty().and(frameController.getFrameModel().getPlayingProperty()));
 
     }
-
+    public void test(String toto){
+        System.out.println(toto.toUpperCase(Locale.ROOT));
+    }
 
     public static void main(String[] args) {
         launch(args);

@@ -9,6 +9,7 @@ import jeudelavie.model.FrameModel;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FrameController implements Initializable {
 
@@ -57,11 +58,11 @@ public class FrameController implements Initializable {
     @FXML
     protected void onPlayPauseButtonAction() {
 
-        if (this.frameModel.isPlaying()){
+        if (this.frameModel.isPlaying()) {
             System.out.println("Pause the game");
             this.frameModel.setPlaying(false);
             playPauseButton.setText("Play");
-        }else {
+        } else {
             System.out.println("Playing the game");
             this.frameModel.setPlaying(true);
             playPauseButton.setText("Pause");
@@ -119,66 +120,88 @@ public class FrameController implements Initializable {
         this.frameModel.setAliveMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem()));
         this.frameModel.setAliveMax(Integer.parseInt(maxHealthCombo.getSelectionModel().getSelectedItem()));
 
+        AtomicBoolean lonelinessChanging = new AtomicBoolean(false);
+        AtomicBoolean suffocationChanging = new AtomicBoolean(false);
+        AtomicBoolean minHealthChanging = new AtomicBoolean(false);
+        AtomicBoolean maxHealthChanging = new AtomicBoolean(false);
+
         //iterationsLabel.textProperty().bind(this.frameModel.getNumberOfIterations().asString());
 
         lonelinessDeathCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if ((Integer.parseInt(newValue) >= this.frameModel.getSuffocationDeath())) {
-                alertGenerationError("Loneliness can't be above or equal to suffocation");
-                //TODO Revert selected choice
-                //lonelinessDeathCombo.getSelectionModel().select("1");
-            } else {
-                ButtonType button = alertGenerationConfirmation();
-                if (button == ButtonType.OK) {
-                    this.frameModel.setLonelinessDeath(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem()));
+            if (!lonelinessChanging.get()) {
+                lonelinessChanging.set(true);
+                if ((Integer.parseInt(newValue) > this.frameModel.getSuffocationDeath())) {
+                    alertGenerationError("Loneliness can't be above or equal to suffocation");
+                    lonelinessDeathCombo.getSelectionModel().clearSelection();
+                    lonelinessDeathCombo.getSelectionModel().select(oldValue);
                 } else {
-                    //TODO Revert selected choice
-                    //lonelinessDeathCombo.getSelectionModel().select(oldValue);
+                    ButtonType button = alertGenerationConfirmation();
+                    if (button == ButtonType.OK) {
+                        this.frameModel.setLonelinessDeath(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem()));
+                    } else {
+                        //TODO Revert selected choice
+                        lonelinessDeathCombo.getSelectionModel().clearSelection();
+                        lonelinessDeathCombo.getSelectionModel().select(oldValue);
+                    }
                 }
+                lonelinessChanging.set(false);
             }
         });
         suffocationDeathCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if ((Integer.parseInt(newValue) <= this.frameModel.getLonelinessDeath())) {
-                alertGenerationError("Suffocation can't be bellow or equal to loneliness");
-                //TODO Revert selected choice
-                //suffocationDeathCombo.getSelectionModel().select(oldValue);
-            } else {
-                ButtonType button = alertGenerationConfirmation();
-                if (button == ButtonType.OK) {
-                    this.frameModel.setSuffocationDeath(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem()));
+            if (!suffocationChanging.get()) {
+                suffocationChanging.set(true);
+                if ((Integer.parseInt(newValue) < this.frameModel.getLonelinessDeath())) {
+                    alertGenerationError("Suffocation can't be bellow or equal to loneliness");
+                    suffocationDeathCombo.getSelectionModel().clearSelection();
+                    suffocationDeathCombo.getSelectionModel().select(oldValue);
                 } else {
-                    //TODO Revert selected choice
-                    //suffocationDeathCombo.getSelectionModel().select(oldValue);
+                    ButtonType button = alertGenerationConfirmation();
+                    if (button == ButtonType.OK) {
+                        this.frameModel.setSuffocationDeath(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem()));
+                    } else {
+                        suffocationDeathCombo.getSelectionModel().clearSelection();
+                        suffocationDeathCombo.getSelectionModel().select(oldValue);
+                    }
                 }
+                suffocationChanging.set(false);
             }
         });
         minHealthCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if ((Integer.parseInt(newValue) >= this.frameModel.getAliveMax())) {
-                alertGenerationError("Minimum value can't be above or equal to Max value");
-                //TODO Revert selected choice
-                //minHealthCombo.getSelectionModel().select(oldValue);
-            } else {
-                ButtonType button = alertGenerationConfirmation();
-                if (button == ButtonType.OK) {
-                    this.frameModel.setAliveMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem()));
+            if (!minHealthChanging.get()) {
+                minHealthChanging.set(true);
+                if ((Integer.parseInt(newValue) > this.frameModel.getAliveMax())) {
+                    alertGenerationError("Minimum value can't be above or equal to Max value");
+                    minHealthCombo.getSelectionModel().clearSelection();
+                    minHealthCombo.getSelectionModel().select(oldValue);
                 } else {
-                    //TODO Revert selected choice
-                    //minHealthCombo.getSelectionModel().select(oldValue);
+                    ButtonType button = alertGenerationConfirmation();
+                    if (button == ButtonType.OK) {
+                        this.frameModel.setAliveMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem()));
+                    } else {
+                        minHealthCombo.getSelectionModel().clearSelection();
+                        minHealthCombo.getSelectionModel().select(oldValue);
+                    }
                 }
+                minHealthChanging.set(false);
             }
         });
         maxHealthCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if ((Integer.parseInt(newValue) <= this.frameModel.getAliveMin())) {
-                alertGenerationError("Max value can't be bellow or equal to min value");
-                //TODO Revert selected choice
-                //maxHealthCombo.getSelectionModel().select(oldValue);
-            } else {
-                ButtonType button = alertGenerationConfirmation();
-                if (button == ButtonType.OK) {
-                    this.frameModel.setAliveMax(Integer.parseInt(maxHealthCombo.getSelectionModel().getSelectedItem().toString()));
+            if (!maxHealthChanging.get()) {
+                maxHealthChanging.set(true);
+                if ((Integer.parseInt(newValue) < this.frameModel.getAliveMin())) {
+                    alertGenerationError("Max value can't be bellow or equal to min value");
+                    maxHealthCombo.getSelectionModel().clearSelection();
+                    maxHealthCombo.getSelectionModel().select(oldValue);
                 } else {
-                    //TODO Revert selected choice
-                    //maxHealthCombo.getSelectionModel().select(oldValue);
+                    ButtonType button = alertGenerationConfirmation();
+                    if (button == ButtonType.OK) {
+                        this.frameModel.setAliveMax(Integer.parseInt(maxHealthCombo.getSelectionModel().getSelectedItem().toString()));
+                    } else {
+                        maxHealthCombo.getSelectionModel().clearSelection();
+                        maxHealthCombo.getSelectionModel().select(oldValue);
+                    }
                 }
+                maxHealthChanging.set(false);
             }
         });
     }
