@@ -216,4 +216,27 @@ public class BoardController {
         this.boardModel.resetBoard();
         draw();
     }
+
+    public boolean[][] toBoolean() {
+        boolean[][] booleans = new boolean[this.boardSize][this.boardSize];
+        for (int i = 0; i < this.boardSize; i++) {
+            for (int j = 0; j < this.boardSize; j++) {
+                booleans[i][j] = this.boardModel.getState(i, j) == 1;
+            }
+        }
+        return booleans;
+    }
+
+    public void randomizeBoard(int probability) {
+        for (int i = 0; i < this.boardSize; i++) {
+            for (int j = 0; j < this.boardSize; j++) {
+                if (probability > RandomGenerator.generator.nextInt(100)){
+                    this.boardModel.setAlive(i, j);
+                }else{
+                    this.boardModel.setDead(i, j);
+                }
+            }
+        }
+        draw();
+    }
 }
