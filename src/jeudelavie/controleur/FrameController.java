@@ -10,6 +10,7 @@ import jeudelavie.model.FigureModel;
 import jeudelavie.model.FrameModel;
 import jeudelavie.vue.BoardView;
 
+import javax.swing.event.ChangeListener;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -63,6 +64,9 @@ public class FrameController implements Initializable {
     private Label iterationsLabel;
 
     @FXML
+    private Button boardResizeButton;
+
+    @FXML
     protected void onPlayPauseButtonAction() {
 
         if (this.frameModel.isPlaying()) {
@@ -107,6 +111,18 @@ public class FrameController implements Initializable {
 
     }
 
+    //TODO RESIZE FUNCTION DANS BOARD
+    @FXML
+    protected void onBoardResizeButtonAction() {
+        if(!(boardSizeTextField.getText() =="")){
+            ButtonType button = alertGenerationConfirmation();
+            if (button == ButtonType.OK) {
+                this.boardController.resizeFrame(Integer.parseInt(boardSizeTextField.getText()));
+            } else {
+            }
+        }
+    }
+
     private FrameModel frameModel;
     private FigureModel figureModel;
     private BoardController boardController;
@@ -144,6 +160,11 @@ public class FrameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        boardSizeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                boardSizeTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
 
         figureModel = new FigureModel(frameModel.getDefaultFigureSize());
 
@@ -159,6 +180,7 @@ public class FrameController implements Initializable {
         AtomicBoolean minHealthChanging = new AtomicBoolean(false);
         AtomicBoolean maxHealthChanging = new AtomicBoolean(false);
 
+        //TODO REFACTOR
         lonelinessDeathCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             if (!lonelinessChanging.get()) {
                 lonelinessChanging.set(true);
@@ -236,6 +258,9 @@ public class FrameController implements Initializable {
                 maxHealthChanging.set(false);
             }
         });
+
+
+
     }
 
 

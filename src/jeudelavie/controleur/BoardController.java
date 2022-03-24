@@ -16,6 +16,12 @@ public class BoardController {
     private BoardView boardView;
     private BoardController figureController;
 
+    //TODO RESIZE FUNCTION
+    public void resizeFrame(int boardSize) {
+        this.boardSize = boardSize;
+        this.boardModel.setSize(boardSize);
+    }
+
     private int boardSize;
 
     public BoardController(int boardSize) {
@@ -226,6 +232,21 @@ public class BoardController {
         }
         return booleans;
     }
+
+    // FONCTION POUR INITIALISER LE BOARD AVEC UN TABLEAU DE BOOLEENS
+    public void initBoardFromBoolean(boolean[][] booleans, int size){
+        this.boardSize = size;
+        this.boardModel.setSize(size);
+        for (int i = 0; i < this.boardSize; i++) {
+            for (int j = 0; j < this.boardSize; j++) {
+                if(booleans[i][j]){
+                    this.getBoardModel().setAlive(i,j);
+                }
+                this.getBoardModel().setDead(i,j);
+            }
+        }
+    }
+
 
     public void randomizeBoard(int probability) {
         for (int i = 0; i < this.boardSize; i++) {

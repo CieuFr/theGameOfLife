@@ -12,6 +12,10 @@ public class BoardModel {
     private int zoomRatio;
     private int boardPixelSize;
 
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     private int[][] board;
 
     IntegerProperty numberOfIterations;
