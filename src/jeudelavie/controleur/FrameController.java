@@ -126,10 +126,12 @@ public class FrameController implements Initializable {
         //  TODO !important change from board controller to directly board view cleaner
         this.boardController = boardController;
         this.boardPane.getChildren().add(this.boardController.getBoardView());
+        setUpFigureController();
     }
 
     public void setUpFigureController() {
-        figureController = new BoardController(10);
+        figureController = new BoardController(frameModel.getDefaultFigureSize());
+        boardController.setFigureController(figureController);
         this.figurePane.getChildren().add(this.figureController.getBoardView());
         figureController.draw();
     }
@@ -141,7 +143,6 @@ public class FrameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        setUpFigureController();
 
         figureModel = new FigureModel(frameModel.getDefaultFigureSize());
 

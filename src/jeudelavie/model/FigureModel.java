@@ -14,8 +14,8 @@ public class FigureModel {
     public FigureModel(int defaultFigureSize){
         this.defaultFigureSize = defaultFigureSize;
         patternList = new ArrayList<>();
-        patternList.add(new Pattern(defaultFigureSize,"Blank",getPlannerPattern()));
-        patternList.add(new Pattern(defaultFigureSize,"Planner",getBlankPattern()));
+        patternList.add(new Pattern(defaultFigureSize,"Blank",getBlankPattern()));
+        patternList.add(new Pattern(defaultFigureSize,"Planner",getPlannerPattern()));
         patternList.add(new Pattern(defaultFigureSize,"Infinite",getSmallestInfiniteStructure()));
     }
 

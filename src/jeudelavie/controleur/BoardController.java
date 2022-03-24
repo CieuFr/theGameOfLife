@@ -44,8 +44,8 @@ public class BoardController {
             int cellY = (int) Math.floor((clickEvent.getY() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
 
             if(clickEvent.isShiftDown() && (figureController != null)){
-
-                //this.pastFigure(figureController,figureController.getBoardModel().getBoardSize(),cellX,cellY);
+                System.out.println("shift click");
+                this.pastFigure(figureController.getBoardModel().getBoard(),figureController.getBoardModel().getBoardSize(),cellX,cellY);
 
             } else {
                 //boardModel.getBoard()[cellX][cellY] == 0 ?
@@ -54,7 +54,7 @@ public class BoardController {
         });
     }
 
-    public void setBoardController(BoardController figureController){
+    public void setFigureController(BoardController figureController){
         this.figureController = figureController;
     }
 
