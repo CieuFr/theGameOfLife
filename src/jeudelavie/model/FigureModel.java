@@ -2,6 +2,7 @@ package jeudelavie.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import jeudelavie.miscellaneous.Pattern;
 
 import java.util.ArrayList;
 import java.util.List;

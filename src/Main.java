@@ -41,9 +41,9 @@ public class Main extends Application {
 
 
         // TODO WTF JAVA ?!?!?!?!? 
-        /*frameController.getFrameModel().getPlayingProperty().addListener(listener -> {
+        frameController.getFrameModel().getPlayingProperty().addListener(listener -> {
             System.out.println(gameTimeLine.getBooleanProperty());
-        });*/
+        });
         //frameController.getFrameModel().getPlayingProperty().bindBidirectional(gameTimeLine.getBooleanProperty());
         gameTimeLine.getBooleanProperty().bind(frameController.getFrameModel().getPlayingProperty().and(frameController.getFrameModel().getPlayingProperty()));
 

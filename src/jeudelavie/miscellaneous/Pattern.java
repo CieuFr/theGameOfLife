@@ -1,4 +1,4 @@
-package jeudelavie.model;
+package jeudelavie.miscellaneous;
 
 public class Pattern {
 

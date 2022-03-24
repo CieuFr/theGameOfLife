@@ -1,6 +1,7 @@
 package jeudelavie.controleur;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import jeudelavie.model.BoardModel;
@@ -42,13 +43,14 @@ public class BoardController {
             // TODO refactor
             int cellX = (int) Math.floor((clickEvent.getX() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
             int cellY = (int) Math.floor((clickEvent.getY() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
-
-            if(clickEvent.isShiftDown() && (figureController != null)){
-                System.out.println("shift click");
-                this.pastFigure(figureController.getBoardModel().getBoard(),figureController.getBoardModel().getBoardSize(),cellX,cellY);
-
+            if(clickEvent.getButton() == MouseButton.SECONDARY){
+                if(clickEvent.isShiftDown() && (figureController != null)){ 
+                    this.pastFigure(figureController.getBoardModel().getBoard(),figureController.getBoardModel().getBoardSize(),cellX,cellY);
+                } else {
+                    this.figureController.getBoardModel().setBoard(getSquareFromBoard(cellX,cellY,figureController.getBoardModel().getBoardSize()));
+                    this.figureController.draw();
+                }
             } else {
-                //boardModel.getBoard()[cellX][cellY] == 0 ?
                         this.inverseCellState(cellX, cellY);
             }
         });
@@ -142,6 +144,20 @@ public class BoardController {
             }
         }
         draw();
+    }
+
+    public int[][] getSquareFromBoard(int x, int y, int figureSize){
+        int[][] sampleSquare = new int[figureSize][figureSize];
+        for (int i = 0; i < figureSize; i++) {
+            for (int j = 0; j < figureSize; j++) {
+                if(!(((x+i)>=boardSize)|| ((y+j)>=boardSize))){
+                    sampleSquare[i][j] = boardModel.getBoard()[x + i][y + j];
+                } else {
+                    sampleSquare[i][j] = 0;
+                }
+            }
+        }
+        return sampleSquare;
     }
 
     public void draw() {
