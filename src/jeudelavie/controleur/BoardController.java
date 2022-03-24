@@ -4,9 +4,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
+import jeudelavie.miscellaneous.RandomGenerator;
 import jeudelavie.model.BoardModel;
 import jeudelavie.model.FrameModel;
 import jeudelavie.vue.BoardView;
+
+import java.util.Arrays;
 
 public class BoardController {
     private BoardModel boardModel;
@@ -56,7 +59,7 @@ public class BoardController {
         });
     }
 
-    public void setFigureController(BoardController figureController){
+    public void setFigureController(BoardController figureController) {
         this.figureController = figureController;
     }
 
@@ -135,10 +138,10 @@ public class BoardController {
         draw();
     }
 
-    public void pastFigure(int[][] figure, int figureSize, int x, int y ) {
+    public void pastFigure(int[][] figure, int figureSize, int x, int y) {
         for (int i = 0; i < figureSize; i++) {
             for (int j = 0; j < figureSize; j++) {
-                if(!(((x+i)>=boardSize)|| ((y+j)>=boardSize)) ){
+                if (!(((x + i) >= boardSize) || ((y + j) >= boardSize))) {
                     boardModel.getBoard()[x + i][y + j] = figure[i][j];
                 }
             }

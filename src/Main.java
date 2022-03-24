@@ -16,13 +16,14 @@ import jeudelavie.miscellaneous.ComputeService;
 import jeudelavie.miscellaneous.GameTimeLine;
 import jeudelavie.model.FrameModel;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BoardController boardController = new BoardController(200);
+        BoardController boardController = new BoardController(300);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/jeudelavie/vue/frame-view.fxml"));
         fxmlLoader.setController(new FrameController(new FrameModel()));
         AnchorPane root = fxmlLoader.load();
@@ -46,7 +47,7 @@ public class Main extends Application {
         });
         //frameController.getFrameModel().getPlayingProperty().bindBidirectional(gameTimeLine.getBooleanProperty());
         gameTimeLine.getBooleanProperty().bind(frameController.getFrameModel().getPlayingProperty().and(frameController.getFrameModel().getPlayingProperty()));
-
+        System.out.println(Arrays.deepToString(boardController.toBoolean()));
     }
     public void test(String toto){
         System.out.println(toto.toUpperCase(Locale.ROOT));

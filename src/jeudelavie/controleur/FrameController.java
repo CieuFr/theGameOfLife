@@ -89,6 +89,7 @@ public class FrameController implements Initializable {
     @FXML
     protected void onRandomizeButtonAction() {
         System.out.println("TODO randomize ");
+        this.boardController.randomizeBoard(50);
     }
 
     @FXML
