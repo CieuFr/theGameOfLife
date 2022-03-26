@@ -42,11 +42,11 @@ public class Main extends Application {
 
 
         // TODO WTF JAVA ?!?!?!?!? 
-        frameController.getFrameModel().getPlayingProperty().addListener(listener -> {
+        frameController.getBoardController().getBoardModel().getPlayingProperty().addListener(listener -> {
             System.out.println(gameTimeLine.getBooleanProperty());
         });
         //frameController.getFrameModel().getPlayingProperty().bindBidirectional(gameTimeLine.getBooleanProperty());
-        gameTimeLine.getBooleanProperty().bind(frameController.getFrameModel().getPlayingProperty().and(frameController.getFrameModel().getPlayingProperty()));
+        gameTimeLine.getBooleanProperty().bind(frameController.getBoardController().getBoardModel().getPlayingProperty().and(frameController.getBoardController().getBoardModel().getPlayingProperty()));
         System.out.println(Arrays.deepToString(boardController.toBoolean()));
     }
     public void test(String toto){

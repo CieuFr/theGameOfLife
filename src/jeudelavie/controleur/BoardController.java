@@ -16,10 +16,11 @@ public class BoardController {
     private BoardView boardView;
     private BoardController figureController;
 
-    //TODO RESIZE FUNCTION
+    //TODO PB AVEC LE RESIZE
     public void resizeFrame(int boardSize) {
         this.boardSize = boardSize;
         this.boardModel.setSize(boardSize);
+        this.draw();
     }
 
     private int boardSize;
@@ -52,14 +53,14 @@ public class BoardController {
             // TODO refactor
             int cellX = (int) Math.floor((clickEvent.getX() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
             int cellY = (int) Math.floor((clickEvent.getY() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
-            if(clickEvent.getButton() == MouseButton.SECONDARY){
-                if(clickEvent.isShiftDown() && (figureController != null)){ 
+            if((clickEvent.getButton() == MouseButton.SECONDARY)&& (!boardModel.isPlaying())){
+                if(clickEvent.isShiftDown() && (figureController != null)){
                     this.pastFigure(figureController.getBoardModel().getBoard(),figureController.getBoardModel().getBoardSize(),cellX,cellY);
                 } else {
                     this.figureController.getBoardModel().setBoard(getSquareFromBoard(cellX,cellY,figureController.getBoardModel().getBoardSize()));
                     this.figureController.draw();
                 }
-            } else {
+            } else if((clickEvent.getButton() == MouseButton.PRIMARY)) {
                         this.inverseCellState(cellX, cellY);
             }
         });

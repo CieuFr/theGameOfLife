@@ -1,6 +1,8 @@
 package jeudelavie.model;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.Arrays;
@@ -11,6 +13,7 @@ public class BoardModel {
     private int size;
     private int zoomRatio;
     private int boardPixelSize;
+    private BooleanProperty playingProperty;
 
     public void setSize(int size) {
         this.size = size;
@@ -26,6 +29,14 @@ public class BoardModel {
         this.board = new int[size][size];
         // TODO
         this.numberOfIterations = new SimpleIntegerProperty(0);
+        this.playingProperty = new SimpleBooleanProperty(false);
+    }
+    public boolean isPlayingProperty() {
+        return playingProperty.get();
+    }
+
+    public BooleanProperty playingPropertyProperty() {
+        return playingProperty;
     }
 
     public int getSize() {
@@ -150,6 +161,18 @@ public class BoardModel {
 
     public int getZoomRatio() {
         return this.zoomRatio;
+    }
+
+    public BooleanProperty getPlayingProperty() {
+        return this.playingProperty;
+    }
+
+    public void setPlaying(boolean state) {
+        this.playingProperty.set(state);
+    }
+
+    public boolean isPlaying() {
+        return this.playingProperty.get();
     }
 
     public void decrementZoomRatio() {

@@ -69,20 +69,25 @@ public class FrameController implements Initializable {
     @FXML
     protected void onPlayPauseButtonAction() {
 
-        if (this.frameModel.isPlaying()) {
+        if (this.getBoardController().getBoardModel().isPlaying()) {
             System.out.println("Pause the game");
-            this.frameModel.setPlaying(false);
+            this.getBoardController().getBoardModel().setPlaying(false);
             playPauseButton.setText("Play");
         } else {
             System.out.println("Playing the game");
-            this.frameModel.setPlaying(true);
+            this.getBoardController().getBoardModel().setPlaying(true);
             playPauseButton.setText("Pause");
         }
     }
 
     @FXML
     protected void onResetButtonAction() {
-       this.boardController.resetBoard();
+        if(!(boardSizeTextField.getText() =="")){
+            ButtonType button = alertGenerationConfirmation("You are about to reset the board");
+            if (button == ButtonType.OK) {
+                this.boardController.resetBoard();
+            }
+        }
     }
 
     @FXML
@@ -92,8 +97,12 @@ public class FrameController implements Initializable {
 
     @FXML
     protected void onRandomizeButtonAction() {
-        System.out.println("TODO randomize ");
-        this.boardController.randomizeBoard(20);
+        if(!(boardSizeTextField.getText() =="")){
+            ButtonType button = alertGenerationConfirmation("You are about to randomize the board");
+            if (button == ButtonType.OK) {
+                this.boardController.randomizeBoard(20);
+            }
+        }
     }
 
     @FXML
@@ -115,10 +124,9 @@ public class FrameController implements Initializable {
     @FXML
     protected void onBoardResizeButtonAction() {
         if(!(boardSizeTextField.getText() =="")){
-            ButtonType button = alertGenerationConfirmation();
+            ButtonType button = alertGenerationConfirmation("You are about to resize the board");
             if (button == ButtonType.OK) {
                 this.boardController.resizeFrame(Integer.parseInt(boardSizeTextField.getText()));
-            } else {
             }
         }
     }
@@ -144,6 +152,14 @@ public class FrameController implements Initializable {
         this.boardController = boardController;
         this.boardPane.getChildren().add(this.boardController.getBoardView());
         setUpFigureController();
+        randomizeButton.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
+        resetButton.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
+        boardResizeButton.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
+        nextGenerationButton.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
+        maxHealthCombo.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
+        minHealthCombo.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
+        suffocationDeathCombo.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
+        lonelinessDeathCombo.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
     }
 
     public void setUpFigureController() {
@@ -189,7 +205,7 @@ public class FrameController implements Initializable {
                     lonelinessDeathCombo.getSelectionModel().clearSelection();
                     lonelinessDeathCombo.getSelectionModel().select(oldValue);
                 } else {
-                    ButtonType button = alertGenerationConfirmation();
+                    ButtonType button = alertGenerationConfirmation(alertGenericText);
                     if (button == ButtonType.OK) {
                         this.frameModel.setLonelinessDeath(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem()));
                     } else {
@@ -209,7 +225,7 @@ public class FrameController implements Initializable {
                     suffocationDeathCombo.getSelectionModel().clearSelection();
                     suffocationDeathCombo.getSelectionModel().select(oldValue);
                 } else {
-                    ButtonType button = alertGenerationConfirmation();
+                    ButtonType button = alertGenerationConfirmation(alertGenericText);
                     if (button == ButtonType.OK) {
                         this.frameModel.setSuffocationDeath(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem()));
                     } else {
@@ -228,7 +244,7 @@ public class FrameController implements Initializable {
                     minHealthCombo.getSelectionModel().clearSelection();
                     minHealthCombo.getSelectionModel().select(oldValue);
                 } else {
-                    ButtonType button = alertGenerationConfirmation();
+                    ButtonType button = alertGenerationConfirmation(alertGenericText);
                     if (button == ButtonType.OK) {
                         this.frameModel.setAliveMin(Integer.parseInt(minHealthCombo.getSelectionModel().getSelectedItem()));
                     } else {
@@ -247,7 +263,7 @@ public class FrameController implements Initializable {
                     maxHealthCombo.getSelectionModel().clearSelection();
                     maxHealthCombo.getSelectionModel().select(oldValue);
                 } else {
-                    ButtonType button = alertGenerationConfirmation();
+                    ButtonType button = alertGenerationConfirmation(alertGenericText);
                     if (button == ButtonType.OK) {
                         this.frameModel.setAliveMax(Integer.parseInt(maxHealthCombo.getSelectionModel().getSelectedItem().toString()));
                     } else {
@@ -262,13 +278,13 @@ public class FrameController implements Initializable {
 
 
     }
+    String alertGenericText = "Do you want to proceed with the changes ?";
 
 
-
-    private ButtonType alertGenerationConfirmation() {
+    private ButtonType alertGenerationConfirmation(String text) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Changing values");
-        alert.setHeaderText("Do you want to proceed with the changes ?");
+        alert.setHeaderText(text);
         alert.setContentText("Select OK to confirm");
         Optional<ButtonType> result = alert.showAndWait();
         return result.orElse(ButtonType.CANCEL);
