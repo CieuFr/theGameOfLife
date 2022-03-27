@@ -14,15 +14,15 @@ public class BoardModel {
     private int zoomRatio;
     private int boardPixelSize;
     private BooleanProperty playingProperty;
+    private int[][] board;
+    IntegerProperty numberOfIterations;
+
 
     public void setSize(int size) {
         this.size = size;
+        this.zoomRatio = 1;
+        this.board = new int[size][size];
     }
-
-    private int[][] board;
-
-    IntegerProperty numberOfIterations;
-
     public BoardModel(int size) {
         this.size = size;
         this.zoomRatio = 1;
@@ -31,6 +31,7 @@ public class BoardModel {
         this.numberOfIterations = new SimpleIntegerProperty(0);
         this.playingProperty = new SimpleBooleanProperty(false);
     }
+
     public boolean isPlayingProperty() {
         return playingProperty.get();
     }
@@ -52,7 +53,6 @@ public class BoardModel {
         if (y < 0 || y >= size) {
             return 0;
         }
-
         return this.board[x][y];
     }
 
@@ -101,9 +101,9 @@ public class BoardModel {
         }
     }
 
-    public void resetBoard(){
+    public void resetBoard() {
         this.resetIterations();
-        for (int[] row: this.board)
+        for (int[] row : this.board)
             Arrays.fill(row, 0);
     }
 

@@ -27,19 +27,14 @@ public class GameTimeLine {
             @Override
             public void handle(ActionEvent event) {
                 boardController.computeAndSetNextGeneration(frameController.getFrameModel());
-                System.out.println("drawed");
             }
         }));
         this.timeline.setCycleCount(Timeline.INDEFINITE);
 
         this.booleanProperty.addListener(listener -> {
-            System.out.println("set play");
-
             if (this.booleanProperty.get()) {
-                System.out.println("play");
                 this.timeline.play();
             } else {
-                System.out.println("pause");
                 this.timeline.pause();
             }
         });

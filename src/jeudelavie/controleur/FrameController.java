@@ -12,6 +12,7 @@ import jeudelavie.vue.BoardView;
 
 import javax.swing.event.ChangeListener;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -123,7 +124,7 @@ public class FrameController implements Initializable {
     //TODO RESIZE FUNCTION DANS BOARD
     @FXML
     protected void onBoardResizeButtonAction() {
-        if(!(boardSizeTextField.getText() =="")){
+        if(!(Objects.equals(boardSizeTextField.getText(), ""))){
             ButtonType button = alertGenerationConfirmation("You are about to resize the board");
             if (button == ButtonType.OK) {
                 this.boardController.resizeFrame(Integer.parseInt(boardSizeTextField.getText()));

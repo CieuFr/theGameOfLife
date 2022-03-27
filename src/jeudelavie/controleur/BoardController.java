@@ -16,17 +16,7 @@ public class BoardController {
     private BoardView boardView;
     private BoardController figureController;
 
-    //TODO PB AVEC LE RESIZE
-    public void resizeFrame(int boardSize) {
-        this.boardSize = boardSize;
-        this.boardModel.setSize(boardSize);
-        this.draw();
-    }
-
-    private int boardSize;
-
     public BoardController(int boardSize) {
-        this.boardSize = boardSize;
         this.boardModel = new BoardModel(boardSize);
         this.boardView = new BoardView(this, this.boardModel);
 
@@ -50,18 +40,25 @@ public class BoardController {
             System.out.println("Click detected");
             System.out.println(clickEvent);
 
-            // TODO refactor
+            // TODO refactor will cause problems later
             int cellX = (int) Math.floor((clickEvent.getX() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
             int cellY = (int) Math.floor((clickEvent.getY() / (this.getBoardModel().getBoardPixelSize() * this.boardModel.getZoomRatio())) * this.boardModel.getBoardSize());
-            if((clickEvent.getButton() == MouseButton.SECONDARY)&& (!boardModel.isPlaying())){
-                if(clickEvent.isShiftDown() && (figureController != null)){
-                    this.pastFigure(figureController.getBoardModel().getBoard(),figureController.getBoardModel().getBoardSize(),cellX,cellY);
+
+            System.out.println("cellX");
+            System.out.println(cellX);
+            System.out.println("cellY");
+            System.out.println(cellY);
+
+
+            if ((clickEvent.getButton() == MouseButton.SECONDARY) && (!boardModel.isPlaying())) {
+                if (clickEvent.isShiftDown() && (figureController != null)) {
+                    this.pastFigure(figureController.getBoardModel().getBoard(), figureController.getBoardModel().getBoardSize(), cellX, cellY);
                 } else {
-                    this.figureController.getBoardModel().setBoard(getSquareFromBoard(cellX,cellY,figureController.getBoardModel().getBoardSize()));
+                    this.figureController.getBoardModel().setBoard(getSquareFromBoard(cellX, cellY, figureController.getBoardModel().getBoardSize()));
                     this.figureController.draw();
                 }
-            } else if((clickEvent.getButton() == MouseButton.PRIMARY)) {
-                        this.inverseCellState(cellX, cellY);
+            } else if ((clickEvent.getButton() == MouseButton.PRIMARY)) {
+                this.inverseCellState(cellX, cellY);
             }
         });
     }
@@ -70,33 +67,27 @@ public class BoardController {
         this.figureController = figureController;
     }
 
-    // TODO
     public void zoomIn() {
-        System.out.println("zoom in");
         this.boardModel.incrementZoomRatio();
-
-        System.out.println(this.boardModel.getZoomRatio());
-
         draw();
     }
 
-    // TODO
     public void zoomOut() {
-        System.out.println("zoom out");
         this.boardModel.decrementZoomRatio();
-
-        System.out.println(this.boardModel.getZoomRatio());
-
         draw();
     }
 
 
     // TODO
     public int[][] computeNextGeneration(FrameModel frameModel) {
-        int[][] newBoard = new int[this.boardSize][this.boardSize];
+        int boardSize = this.boardModel.getBoardSize();
+        int[][] newBoard = new int[boardSize][boardSize];
 
-        for (int x = 0; x < this.boardSize; x++) {
-            for (int y = 0; y < this.boardSize; y++) {
+        System.out.println("size");
+        System.out.println(boardSize);
+
+        for (int x = 0; x < boardSize; x++) {
+            for (int y = 0; y < boardSize; y++) {
                 int aliveNeighbours = boardModel.countAliveNeighbours(x, y);
                 if (boardModel.getState(x, y) == 1) {
                     if (aliveNeighbours >= frameModel.getSuffocationDeath()) {
@@ -113,26 +104,9 @@ public class BoardController {
                         newBoard[x][y] = 0;
                     }
                 }
-
-                /*int aliveCells = 0;
-                for (int iNearCells = -1; iNearCells < 2; iNearCells++) {
-                    for (int jNearCells = -1; jNearCells < 2; jNearCells++) {
-                        aliveCells += ((i + iNearCells < 0) || (j + jNearCells < 0) || (i + iNearCells > boardModel.getSize() - 1) || (j + jNearCells > boardModel.getSize() - 1)) ? 0 : boardModel.getBoard()[i + iNearCells][j + jNearCells];
-                    }
-                }
-                aliveCells -= boardModel.getBoard()[i][j];
-
-                if ((boardModel.getBoard()[i][j] == 1) && (aliveCells >= boardModel.getMortMin()) && (aliveCells <= boardModel.getMortMax())) {
-                    boardModel.setDead(i, j);
-                } else if ((boardModel.getBoard()[i][j] == 0) && (aliveCells >= boardModel.getVieMin()) && (aliveCells <= boardModel.getMortMax())) {
-                    boardModel.setAlive(i, j);
-                }*/
             }
         }
-        // TODO revert to directly modify board
-
         return newBoard;
-
     }
 
     public void computeAndSetNextGeneration(FrameModel frameModel) {
@@ -146,6 +120,8 @@ public class BoardController {
     }
 
     public void pastFigure(int[][] figure, int figureSize, int x, int y) {
+        int boardSize = this.boardModel.getBoardSize();
+
         for (int i = 0; i < figureSize; i++) {
             for (int j = 0; j < figureSize; j++) {
                 if (!(((x + i) >= boardSize) || ((y + j) >= boardSize))) {
@@ -156,12 +132,13 @@ public class BoardController {
         draw();
     }
 
-    public int[][] getSquareFromBoard(int x, int y, int figureSize){
+    public int[][] getSquareFromBoard(int x, int y, int figureSize) {
+        int boardSize = this.boardModel.getBoardSize();
         int[][] sampleSquare = new int[figureSize][figureSize];
         for (int i = 0; i < figureSize; i++) {
             for (int j = 0; j < figureSize; j++) {
-                if(!(((x+i)>=boardSize)|| ((y+j)>=boardSize))){
-                    sampleSquare[i][j] = boardModel.getBoard()[x + i][y + j];
+                if (!(((x + i) >= boardSize) || ((y + j) >= boardSize))) {
+                    sampleSquare[i][j] = boardModel.getBoard()[x + i][y + j]; // TODO get cell at & remove get board
                 } else {
                     sampleSquare[i][j] = 0;
                 }
@@ -170,32 +147,51 @@ public class BoardController {
         return sampleSquare;
     }
 
+    //TODO PB AVEC LE RESIZE
+    public void resizeFrame(int boardSize) {
+        this.boardModel.setSize(boardSize);
+        this.draw();
+    }
+
     public void draw() {
+        int boardSize = this.boardModel.getBoardSize();
+
         GraphicsContext graphicsContext = this.boardView.getGraphicsContext2D();
         Affine affine = new Affine();
-        this.boardView.setWidth(this.boardModel.getBoardPixelSize() * this.boardModel.getZoomRatio());
-        this.boardView.setHeight(this.boardModel.getBoardPixelSize() * this.boardModel.getZoomRatio());
+        this.boardModel.setBoardPixelWidth(Math.max((5 * boardModel.getBoardSize()), 200)); // HERE
 
-        affine.appendScale(this.boardModel.getBoardPixelSize() / this.boardSize * this.boardModel.getZoomRatio(), this.boardModel.getBoardPixelSize() / this.boardSize * this.boardModel.getZoomRatio());
+        int new_size = this.boardModel.getBoardPixelSize() * this.boardModel.getZoomRatio();
+        new_size = Math.min(new_size, 8192);
+        this.boardView.setWidth(new_size);
+        this.boardView.setHeight(new_size);
+
+        System.out.println("new_size");
+        System.out.println(new_size);
+
+        int scale = this.boardModel.getBoardPixelSize() / boardSize * this.boardModel.getZoomRatio();
+        affine.appendScale(scale, scale);
+
 
         graphicsContext.setTransform(affine);
         graphicsContext.setFill(Color.LIGHTGRAY);
-        graphicsContext.fillRect(0, 0, this.boardSize, this.boardSize);
+        graphicsContext.fillRect(0, 0, boardSize, boardSize);
         graphicsContext.setFill(Color.BLACK);
-        for (int x = 0; x < this.boardSize; x++) {
-            for (int y = 0; y < this.boardSize; y++) {
+
+        for (int x = 0; x < boardSize; x++) {
+            for (int y = 0; y < boardSize; y++) {
                 if (this.boardModel.getState(x, y) == 1) {
                     graphicsContext.fillRect(x, y, 1, 1);
                 }
             }
         }
+
         graphicsContext.setStroke(Color.GRAY);
         graphicsContext.setLineWidth(0.05);
-        for (int x = 0; x <= this.boardSize; x++) {
+        for (int x = 0; x <= boardSize; x++) {
             graphicsContext.strokeLine(x, 0, x, boardSize);
         }
 
-        for (int y = 0; y <= this.boardSize; y++) {
+        for (int y = 0; y <= boardSize; y++) {
             graphicsContext.strokeLine(0, y, boardSize, y);
         }
 
@@ -209,11 +205,6 @@ public class BoardController {
         return boardView;
     }
 
-    public void setAlive(int cellX, int cellY) {
-        this.boardModel.setAlive(cellX, cellY);
-        draw();
-    }
-
     public void inverseCellState(int cellX, int cellY) {
         this.boardModel.inverseState(cellX, cellY);
         draw();
@@ -225,9 +216,10 @@ public class BoardController {
     }
 
     public boolean[][] toBoolean() {
-        boolean[][] booleans = new boolean[this.boardSize][this.boardSize];
-        for (int i = 0; i < this.boardSize; i++) {
-            for (int j = 0; j < this.boardSize; j++) {
+        int boardSize = this.boardModel.getBoardSize();
+        boolean[][] booleans = new boolean[boardSize][boardSize];
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
                 booleans[i][j] = this.boardModel.getState(i, j) == 1;
             }
         }
@@ -235,26 +227,27 @@ public class BoardController {
     }
 
     // FONCTION POUR INITIALISER LE BOARD AVEC UN TABLEAU DE BOOLEENS
-    public void initBoardFromBoolean(boolean[][] booleans, int size){
-        this.boardSize = size;
+    public void initBoardFromBoolean(boolean[][] booleans, int size) {
+        int boardSize = this.boardModel.getBoardSize();
         this.boardModel.setSize(size);
-        for (int i = 0; i < this.boardSize; i++) {
-            for (int j = 0; j < this.boardSize; j++) {
-                if(booleans[i][j]){
-                    this.getBoardModel().setAlive(i,j);
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (booleans[i][j]) {
+                    this.getBoardModel().setAlive(i, j);
                 }
-                this.getBoardModel().setDead(i,j);
+                this.getBoardModel().setDead(i, j);
             }
         }
     }
 
 
     public void randomizeBoard(int probability) {
-        for (int i = 0; i < this.boardSize; i++) {
-            for (int j = 0; j < this.boardSize; j++) {
-                if (probability > RandomGenerator.generator.nextInt(100)){
+        int boardSize = this.boardModel.getBoardSize();
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (probability > RandomGenerator.generator.nextInt(100)) {
                     this.boardModel.setAlive(i, j);
-                }else{
+                } else {
                     this.boardModel.setDead(i, j);
                 }
             }

@@ -23,4 +23,6 @@ public class BoardView extends Canvas {
     public BoardController getBoardController() {
         return boardController;
     }
+
+
 }

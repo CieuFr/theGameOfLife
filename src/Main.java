@@ -23,7 +23,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BoardController boardController = new BoardController(300);
+        BoardController boardController = new BoardController(100);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/jeudelavie/vue/frame-view.fxml"));
         fxmlLoader.setController(new FrameController(new FrameModel()));
         AnchorPane root = fxmlLoader.load();
@@ -47,7 +47,6 @@ public class Main extends Application {
         });
         //frameController.getFrameModel().getPlayingProperty().bindBidirectional(gameTimeLine.getBooleanProperty());
         gameTimeLine.getBooleanProperty().bind(frameController.getBoardController().getBoardModel().getPlayingProperty().and(frameController.getBoardController().getBoardModel().getPlayingProperty()));
-        System.out.println(Arrays.deepToString(boardController.toBoolean()));
     }
     public void test(String toto){
         System.out.println(toto.toUpperCase(Locale.ROOT));
