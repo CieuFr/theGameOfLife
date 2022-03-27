@@ -3,14 +3,11 @@ package jeudelavie.controleur;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import jeudelavie.model.BoardModel;
+import jeudelavie.miscellaneous.Models;
 import jeudelavie.model.FigureModel;
 import jeudelavie.model.FrameModel;
-import jeudelavie.vue.BoardView;
 
-import javax.swing.event.ChangeListener;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
@@ -67,15 +64,18 @@ public class FrameController implements Initializable {
     @FXML
     private Button boardResizeButton;
 
+    private FrameModel frameModel;
+    private Models models;
+    private BoardController boardController;
+    private FigureController figureController;
+
     @FXML
     protected void onPlayPauseButtonAction() {
-
         if (this.getBoardController().getBoardModel().isPlaying()) {
-            System.out.println("Pause the game");
             this.getBoardController().getBoardModel().setPlaying(false);
             playPauseButton.setText("Play");
+            boardController.draw();
         } else {
-            System.out.println("Playing the game");
             this.getBoardController().getBoardModel().setPlaying(true);
             playPauseButton.setText("Pause");
         }
@@ -83,11 +83,9 @@ public class FrameController implements Initializable {
 
     @FXML
     protected void onResetButtonAction() {
-        if(!(boardSizeTextField.getText() =="")){
-            ButtonType button = alertGenerationConfirmation("You are about to reset the board");
-            if (button == ButtonType.OK) {
-                this.boardController.resetBoard();
-            }
+        ButtonType button = alertGenerationConfirmation("You are about to reset the board");
+        if (button == ButtonType.OK) {
+            this.boardController.resetCanvas();
         }
     }
 
@@ -97,12 +95,10 @@ public class FrameController implements Initializable {
     }
 
     @FXML
-    protected void onRandomizeButtonAction() {
-        if(!(boardSizeTextField.getText() =="")){
-            ButtonType button = alertGenerationConfirmation("You are about to randomize the board");
-            if (button == ButtonType.OK) {
-                this.boardController.randomizeBoard(20);
-            }
+    protected void onRandomizeButtonAction() { // TODO readd if ... for value selection
+        ButtonType button = alertGenerationConfirmation("You are about to randomize the board");
+        if (button == ButtonType.OK) {
+            this.boardController.randomizeBoard(20);
         }
     }
 
@@ -113,18 +109,16 @@ public class FrameController implements Initializable {
 
     @FXML
     protected void onLoadButtonAction() {
-
-        if(figureModel.getPatternFromName(patternLoadingCombo.getValue()) != null){
-            figureController.getBoardModel().setBoard(figureModel.getPatternFromName(patternLoadingCombo.getValue()));
+        if (models.getPatternFromName(patternLoadingCombo.getValue()) != null) {
+            figureController.getFigureModel().setBoard(models.getPatternFromName(patternLoadingCombo.getValue())); // TODO set size too !!
             figureController.draw();
         }
-
     }
 
     //TODO RESIZE FUNCTION DANS BOARD
     @FXML
     protected void onBoardResizeButtonAction() {
-        if(!(Objects.equals(boardSizeTextField.getText(), ""))){
+        if (!(Objects.equals(boardSizeTextField.getText(), ""))) {
             ButtonType button = alertGenerationConfirmation("You are about to resize the board");
             if (button == ButtonType.OK) {
                 this.boardController.resizeFrame(Integer.parseInt(boardSizeTextField.getText()));
@@ -132,10 +126,6 @@ public class FrameController implements Initializable {
         }
     }
 
-    private FrameModel frameModel;
-    private FigureModel figureModel;
-    private BoardController boardController;
-    private BoardController figureController;
 
     public FrameController(FrameModel frameModel) {
         this.frameModel = frameModel;
@@ -144,6 +134,7 @@ public class FrameController implements Initializable {
     public FrameModel getFrameModel() {
         return this.frameModel;
     }
+
     public BoardController getBoardController() {
         return this.boardController;
     }
@@ -152,26 +143,26 @@ public class FrameController implements Initializable {
         //  TODO !important change from board controller to directly board view cleaner
         this.boardController = boardController;
         this.boardPane.getChildren().add(this.boardController.getBoardView());
-        setUpFigureController();
-        randomizeButton.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
-        resetButton.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
-        boardResizeButton.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
-        nextGenerationButton.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
-        maxHealthCombo.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
-        minHealthCombo.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
-        suffocationDeathCombo.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
-        lonelinessDeathCombo.disableProperty().bind(boardController.getBoardModel().playingPropertyProperty());
+
+        randomizeButton.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        resetButton.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        boardResizeButton.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        nextGenerationButton.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        maxHealthCombo.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        minHealthCombo.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        suffocationDeathCombo.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        lonelinessDeathCombo.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
     }
 
-    public void setUpFigureController() {
-        figureController = new BoardController(frameModel.getDefaultFigureSize());
-        boardController.setFigureController(figureController);
-        this.figurePane.getChildren().add(this.figureController.getBoardView());
-        figureController.draw();
+    public void addFigureController(FigureController figureController) {
+        this.figureController = figureController;
+        this.boardController.setFigureController(figureController);
+        this.figurePane.getChildren().add(this.figureController.getFigureView());
+        this.figureController.draw();
     }
 
-    public void bindNumberOfIterations(){
-        iterationsLabel.textProperty().bind(this.boardController.getBoardModel().getNumberOfIterations().asString());
+    public void bindNumberOfIterations() {
+        iterationsLabel.textProperty().bind(this.boardController.getBoardModel().getNumberOfIterationsProperty().asString());
     }
 
     @Override
@@ -183,9 +174,9 @@ public class FrameController implements Initializable {
             }
         });
 
-        figureModel = new FigureModel(frameModel.getDefaultFigureSize());
+        models = new Models(frameModel.getDefaultFigureSize());
 
-        patternLoadingCombo.getItems().addAll(figureModel.getObservableListOfPatternsName());
+        patternLoadingCombo.getItems().addAll(models.getObservableListOfPatternsName());
 
         this.frameModel.setLonelinessDeath(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem()));
         this.frameModel.setSuffocationDeath(Integer.parseInt(suffocationDeathCombo.getSelectionModel().getSelectedItem()));
@@ -277,8 +268,8 @@ public class FrameController implements Initializable {
         });
 
 
-
     }
+
     String alertGenericText = "Do you want to proceed with the changes ?";
 
 
