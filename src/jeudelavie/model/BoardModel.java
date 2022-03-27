@@ -5,166 +5,43 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-import java.util.Arrays;
-
-public class BoardModel {
-
-    private int vieMin, vieMax, mortMin, mortMax;
-    private int size;
+public class BoardModel extends CanvasModel {
     private int zoomRatio;
-    private int boardPixelSize;
     private BooleanProperty playingProperty;
-    private int[][] board;
-    IntegerProperty numberOfIterations;
+    private IntegerProperty numberOfIterations;
 
-
-    public void setSize(int size) {
-        this.size = size;
-        this.zoomRatio = 1;
-        this.board = new int[size][size];
-    }
     public BoardModel(int size) {
-        this.size = size;
+        super(size);
         this.zoomRatio = 1;
-        this.board = new int[size][size];
-        // TODO
         this.numberOfIterations = new SimpleIntegerProperty(0);
         this.playingProperty = new SimpleBooleanProperty(false);
     }
 
-    public boolean isPlayingProperty() {
-        return playingProperty.get();
-    }
-
-    public BooleanProperty playingPropertyProperty() {
-        return playingProperty;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    //todo
-    public int getState(int x, int y) {
-        if (x < 0 || x >= size) {
-            return 0;
-        }
-
-        if (y < 0 || y >= size) {
-            return 0;
-        }
-        return this.board[x][y];
-    }
-
-    public int countAliveNeighbours(int x, int y) {
-        int count = 0;
-
-        count += getState(x - 1, y - 1);
-        count += getState(x, y - 1);
-        count += getState(x + 1, y - 1);
-
-        count += getState(x - 1, y);
-        count += getState(x + 1, y);
-
-        count += getState(x - 1, y + 1);
-        count += getState(x, y + 1);
-        count += getState(x + 1, y + 1);
-
-        return count;
-    }
-
-    // TODO
-    public void increaseIterations() {
-        this.numberOfIterations.set(numberOfIterations.get() + 1);
-    }
-    // TODO
-
-    public void resetIterations() {
-        this.numberOfIterations.set(0);
-    }
-    // TODO
-
-    public IntegerProperty getNumberOfIterations() {
-        return numberOfIterations;
-    }
-
-
-    public void setAlive(int x, int y) {
-        this.board[x][y] = 1;
-    }
-
-    public void inverseState(int x, int y) {
-        if (this.board[x][y] == 1) {
-            this.board[x][y] = 0;
-        } else {
-            this.board[x][y] = 1;
-        }
-    }
-
-    public void resetBoard() {
-        this.resetIterations();
-        for (int[] row : this.board)
-            Arrays.fill(row, 0);
-    }
-
-    public void setDead(int x, int y) {
-        this.board[x][y] = 0;
-    }
-
-    public int getVieMin() {
-        return vieMin;
-    }
-
-    public void setVieMin(int vieMin) {
-        this.vieMin = vieMin;
-    }
-
-    public int getVieMax() {
-        return vieMax;
-    }
-
-    public void setVieMax(int vieMax) {
-        this.vieMax = vieMax;
-    }
-
-    public int getMortMin() {
-        return mortMin;
-    }
-
-    public void setMortMin(int mortMin) {
-        this.mortMin = mortMin;
-    }
-
-    public int getMortMax() {
-        return mortMax;
-    }
-
-    public void setMortMax(int mortMax) {
-        this.mortMax = mortMax;
-    }
-
-    public int[][] getBoard() {
-        return board;
-    }
-
-    public int getBoardSize() {
-        return size;
-    }
-
-    public void setBoardPixelWidth(int boardPixelSize) {
-        this.boardPixelSize = boardPixelSize;
-    }
-
-    public int getBoardPixelSize() {
-        return boardPixelSize;
-    }
-
-    public int getZoomRatio() {
-        return this.zoomRatio;
+    @Override
+    public void setSize(int size) {
+        super.setSize(size);
+        this.zoomRatio = 1;
     }
 
     public BooleanProperty getPlayingProperty() {
         return this.playingProperty;
+    }
+
+    public void increaseIterations() {
+        this.numberOfIterations.set(numberOfIterations.get() + 1);
+    }
+
+    public void resetIterations() {
+        this.numberOfIterations.set(0);
+    }
+
+    public IntegerProperty getNumberOfIterationsProperty() {
+        return numberOfIterations;
+    }
+
+    @Override
+    public int getZoomRatio() {
+        return this.zoomRatio;
     }
 
     public void setPlaying(boolean state) {
@@ -176,25 +53,13 @@ public class BoardModel {
     }
 
     public void decrementZoomRatio() {
-        if (zoomRatio > 1)
+        if (zoomRatio > 1) // TODO
             this.zoomRatio--;
     }
 
     public void incrementZoomRatio() {
-        if (zoomRatio < 8)
+        if (zoomRatio < 8) // TODO
             this.zoomRatio++;
     }
 
-    public boolean isAlive(int x, int y) {
-
-        return this.board[x][y] == 1;
-    }
-
-    public boolean isDead(int x, int y) {
-        return this.board[x][y] == 0;
-    }
-
-    public void setBoard(int[][] newBoard) {
-        this.board = newBoard;
-    }
 }
