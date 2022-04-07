@@ -1,5 +1,6 @@
 package jeudelavie.controleur;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -64,6 +65,9 @@ public class FrameController implements Initializable {
     @FXML
     private Button boardResizeButton;
 
+    @FXML
+    private Slider randomizeSlider;
+
     private FrameModel frameModel;
     private Models models;
     private BoardController boardController;
@@ -98,7 +102,7 @@ public class FrameController implements Initializable {
     protected void onRandomizeButtonAction() { // TODO readd if ... for value selection
         ButtonType button = alertGenerationConfirmation("You are about to randomize the board");
         if (button == ButtonType.OK) {
-            this.boardController.randomizeBoard(20);
+            this.boardController.randomizeBoard((int) randomizeSlider.getValue());
         }
     }
 
