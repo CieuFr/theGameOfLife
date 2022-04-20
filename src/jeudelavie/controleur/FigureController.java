@@ -1,9 +1,6 @@
 package jeudelavie.controleur;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
-import javafx.scene.paint.Color;
-import javafx.scene.transform.Affine;
 import jeudelavie.model.FigureModel;
 import jeudelavie.vue.FigureView;
 

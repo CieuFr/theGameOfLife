@@ -1,12 +1,10 @@
 package jeudelavie.controleur;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import jeudelavie.miscellaneous.Models;
-import jeudelavie.model.FigureModel;
 import jeudelavie.model.FrameModel;
 
 import java.net.URL;
@@ -67,6 +65,16 @@ public class FrameController implements Initializable {
 
     @FXML
     private Slider randomizeSlider;
+
+    @FXML
+    private Slider speedSlider;
+
+    @FXML
+    private Label speedLabel;
+
+    @FXML
+    private Label randomLabel;
+
 
     private FrameModel frameModel;
     private Models models;
@@ -156,6 +164,14 @@ public class FrameController implements Initializable {
         minHealthCombo.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
         suffocationDeathCombo.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
         lonelinessDeathCombo.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        speedLabel.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        speedSlider.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        randomizeSlider.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        randomLabel.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+        boardSizeTextField.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
+
+        speedLabel.textProperty().bind(speedSlider.valueProperty().asString("%.0f").concat(" ms"));
+        randomLabel.textProperty().bind(randomizeSlider.valueProperty().asString("%.0f").concat(" %"));
     }
 
     public void addFigureController(FigureController figureController) {
@@ -276,6 +292,9 @@ public class FrameController implements Initializable {
 
     String alertGenericText = "Do you want to proceed with the changes ?";
 
+    public int getSpeedValue(){
+        return ((int) this.speedSlider.getValue());
+    }
 
     private ButtonType alertGenerationConfirmation(String text) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

@@ -43,10 +43,10 @@ public class Main extends Application {
                 boardController.draw();
             }
         });
-        computeService.setPeriod(Duration.millis(10)); // TODO slider
 
         boardController.getBoardModel().getPlayingProperty().addListener(change -> {
             if (boardController.getBoardModel().isPlaying()){
+                computeService.setPeriod(Duration.millis(frameController.getSpeedValue()));
                 computeService.start();
             }else {
                 computeService.cancel();
