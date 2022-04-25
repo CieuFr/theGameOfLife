@@ -11,16 +11,12 @@
    <children>
       <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" fillHeight="false" VBox.vgrow="ALWAYS">
-               <children>
-                  <Pane fx:id="boardPane" style="-fx-background-color: #28cf0a;" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" maxHeight="200.0" prefHeight="200.0" style="-fx-background-color: white;" VBox.vgrow="NEVER">
+            <Pane fx:id="boardPane" style="-fx-background-color: #28cf0a;" VBox.vgrow="ALWAYS" />
+            <HBox alignment="CENTER" maxHeight="270.0" minHeight="270.0" prefHeight="270.0" style="-fx-background-color: white;" VBox.vgrow="NEVER">
                <children>
                   <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                      <children>
-                        <Pane fx:id="figurePane" minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
+                        <Pane fx:id="figurePane" minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0">
                            <VBox.margin>
                               <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
                            </VBox.margin>

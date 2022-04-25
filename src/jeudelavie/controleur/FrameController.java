@@ -292,7 +292,7 @@ public class FrameController implements Initializable {
 
     String alertGenericText = "Do you want to proceed with the changes ?";
 
-    public int getSpeedValue(){
+    public int getSpeedValue() {
         return ((int) this.speedSlider.getValue());
     }
 

@@ -16,7 +16,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BoardController boardController = new BoardController(100);
+        BoardController boardController = new BoardController(20);
         FigureController figureController = new FigureController(10);
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/jeudelavie/vue/frame-view.fxml"));

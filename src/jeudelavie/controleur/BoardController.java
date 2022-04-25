@@ -1,6 +1,7 @@
 package jeudelavie.controleur;
 
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import jeudelavie.miscellaneous.RandomGenerator;
 import jeudelavie.model.BoardModel;
 import jeudelavie.model.FrameModel;
@@ -15,23 +16,38 @@ public class BoardController extends CanvasController {
 
         this.canvasView.setOnScroll(scrollEvent -> {
             double deltaY = scrollEvent.getDeltaY();
+            System.out.println(scrollEvent.getX());
+            System.out.println(scrollEvent.getY());
             // TODO on zoom make the "selected" cell the center of the newly zoomed canvas
             if (deltaY < 0) {
-                this.zoomOut();
+                this.zoomOut(scrollEvent.getX(), scrollEvent.getY());
             } else {
-                this.zoomIn();
+                this.zoomIn(scrollEvent.getX(), scrollEvent.getY());
             }
+            int size = this.canvasModel.getBoardPixelSize() * this.canvasModel.getZoomRatio();
+            size = Math.min(size, 8192);
+
+            double parentWidth = ((Pane) this.canvasView.getParent()).widthProperty().get();
+            double parentHeight = ((Pane) this.canvasView.getParent()).heightProperty().get();
+
+            System.out.println("parentWidth");
+            System.out.println(parentWidth);
+            System.out.println("parentHeight");
+            System.out.println(parentHeight);
+
+            this.canvasView.setLayoutX(parentWidth/2f - size/2f );
+            this.canvasView.setLayoutY(parentHeight/2f - size/2f);
         });
 
-        this.canvasView.setOnDragDetected(dragEvent -> {
+        this.canvasView.setOnMouseDragged(dragEvent -> {
             System.out.println("Drag detected");
-            // TODO on drag move the canvas
+            /**/
+            // TODO on drag move the canvas simple bind
         });
 
         this.canvasView.setOnMouseClicked(clickEvent -> {
-            // TODO refactor will cause problems later | it does n°6 |
-            int cellX = (int) Math.floor((clickEvent.getX() / (this.canvasModel.getBoardPixelSize() * ((BoardModel) this.canvasModel).getZoomRatio())) * this.canvasModel.getSize());
-            int cellY = (int) Math.floor((clickEvent.getY() / (this.canvasModel.getBoardPixelSize() * ((BoardModel) this.canvasModel).getZoomRatio())) * this.canvasModel.getSize());
+            int cellX = (int) Math.floor((clickEvent.getX() / (this.canvasModel.getBoardPixelSize() * (this.canvasModel).getZoomRatio())) * this.canvasModel.getSize());
+            int cellY = (int) Math.floor((clickEvent.getY() / (this.canvasModel.getBoardPixelSize() * (this.canvasModel).getZoomRatio())) * this.canvasModel.getSize());
 
             if ((clickEvent.getButton() == MouseButton.SECONDARY) && (!((BoardModel) this.canvasModel).isPlaying())) {
                 if (clickEvent.isShiftDown() && (this.figureController != null)) {
@@ -55,18 +71,18 @@ public class BoardController extends CanvasController {
         this.figureController = figureController;
     }
 
-    public void zoomIn() {
+    public void zoomIn(double x, double y) {
         ((BoardModel) this.canvasModel).incrementZoomRatio();
         draw();
     }
 
-    public void zoomOut() {
+    public void zoomOut(double x, double y) {
         ((BoardModel) this.canvasModel).decrementZoomRatio();
         draw();
     }
 
     @Override
-    public void draw(){
+    public void draw() {
         draw(!((BoardModel) this.canvasModel).isPlaying());
     }
 
@@ -94,7 +110,6 @@ public class BoardController extends CanvasController {
                 }
             }
         }
-        //((BoardModel) canvasModel).increaseIterations();
         return newBoard;
     }
 

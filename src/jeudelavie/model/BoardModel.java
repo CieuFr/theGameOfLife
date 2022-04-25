@@ -59,7 +59,7 @@ public class BoardModel extends CanvasModel {
     }
 
     public void incrementZoomRatio() {
-        if (zoomRatio < 8) // TODO
+        if (zoomRatio < 10) // TODO
             this.zoomRatio++;
     }
 
