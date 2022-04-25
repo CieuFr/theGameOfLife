@@ -32,7 +32,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.show();
 
-
+        boardController.setViewLayout();
         ComputeService computeService = new ComputeService(boardController, frameController);
         computeService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override

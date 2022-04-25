@@ -99,6 +99,8 @@ public class FrameController implements Initializable {
         if (button == ButtonType.OK) {
             this.boardController.resetCanvas();
         }
+        boardController.setViewLayout();
+
     }
 
     @FXML
@@ -136,6 +138,7 @@ public class FrameController implements Initializable {
                 this.boardController.resizeFrame(Integer.parseInt(boardSizeTextField.getText()));
             }
         }
+        boardController.setViewLayout();
     }
 
 
@@ -155,6 +158,12 @@ public class FrameController implements Initializable {
         //  TODO !important change from board controller to directly board view cleaner
         this.boardController = boardController;
         this.boardPane.getChildren().add(this.boardController.getBoardView());
+        this.boardPane.widthProperty().addListener(resize -> {
+            boardController.setViewLayout();
+        });
+        this.boardPane.heightProperty().addListener(resize -> {
+            boardController.setViewLayout();
+        });
 
         randomizeButton.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());
         resetButton.disableProperty().bind(boardController.getBoardModel().getPlayingProperty());

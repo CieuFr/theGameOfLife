@@ -16,33 +16,18 @@ public class BoardController extends CanvasController {
 
         this.canvasView.setOnScroll(scrollEvent -> {
             double deltaY = scrollEvent.getDeltaY();
-            System.out.println(scrollEvent.getX());
-            System.out.println(scrollEvent.getY());
-            // TODO on zoom make the "selected" cell the center of the newly zoomed canvas
+
             if (deltaY < 0) {
-                this.zoomOut(scrollEvent.getX(), scrollEvent.getY());
+                this.zoomOut();
             } else {
-                this.zoomIn(scrollEvent.getX(), scrollEvent.getY());
+                this.zoomIn();
             }
-            int size = this.canvasModel.getBoardPixelSize() * this.canvasModel.getZoomRatio();
-            size = Math.min(size, 8192);
-
-            double parentWidth = ((Pane) this.canvasView.getParent()).widthProperty().get();
-            double parentHeight = ((Pane) this.canvasView.getParent()).heightProperty().get();
-
-            System.out.println("parentWidth");
-            System.out.println(parentWidth);
-            System.out.println("parentHeight");
-            System.out.println(parentHeight);
-
-            this.canvasView.setLayoutX(parentWidth/2f - size/2f );
-            this.canvasView.setLayoutY(parentHeight/2f - size/2f);
+            this.setViewLayout();
         });
+
 
         this.canvasView.setOnMouseDragged(dragEvent -> {
             System.out.println("Drag detected");
-            /**/
-            // TODO on drag move the canvas simple bind
         });
 
         this.canvasView.setOnMouseClicked(clickEvent -> {
@@ -61,6 +46,17 @@ public class BoardController extends CanvasController {
             }
             this.draw();
         });
+
+    }
+
+    public void setViewLayout() {
+        int size = this.canvasModel.getBoardPixelSize() * this.canvasModel.getZoomRatio();
+        size = Math.min(size, 8192);
+        double parentWidth = ((Pane) this.canvasView.getParent()).widthProperty().get();
+        double parentHeight = ((Pane) this.canvasView.getParent()).heightProperty().get();
+
+        this.canvasView.setLayoutX(parentWidth / 2f - size / 2f);
+        this.canvasView.setLayoutY(parentHeight / 2f - size / 2f);
     }
 
     public BoardModel getBoardModel() {
@@ -71,12 +67,12 @@ public class BoardController extends CanvasController {
         this.figureController = figureController;
     }
 
-    public void zoomIn(double x, double y) {
+    public void zoomIn() {
         ((BoardModel) this.canvasModel).incrementZoomRatio();
         draw();
     }
 
-    public void zoomOut(double x, double y) {
+    public void zoomOut() {
         ((BoardModel) this.canvasModel).decrementZoomRatio();
         draw();
     }
