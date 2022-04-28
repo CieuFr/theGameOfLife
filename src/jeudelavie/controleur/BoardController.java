@@ -38,7 +38,7 @@ public class BoardController extends CanvasController {
                 if (clickEvent.isShiftDown() && (this.figureController != null)) {
                     this.pastFigure(this.figureController.getFigureModel().getBoard(), this.figureController.getFigureModel().getSize(), cellX, cellY);
                 } else {
-                    this.figureController.getFigureModel().setBoard(getSquareFromBoard(cellX, cellY, this.figureController.getFigureModel().getSize())); // TODO change acces to model !important
+                    this.figureController.getFigureModel().setBoard(getSquareFromBoard(cellX, cellY, this.figureController.getFigureModel().getSize()));
                     this.figureController.draw();
                 }
             } else if ((clickEvent.getButton() == MouseButton.PRIMARY)) {
@@ -121,7 +121,7 @@ public class BoardController extends CanvasController {
         for (int i = 0; i < figureSize; i++) {
             for (int j = 0; j < figureSize; j++) {
                 if (!(((x + i) >= boardSize) || ((y + j) >= boardSize))) {
-                    canvasModel.getBoard()[x + i][y + j] = figure[i][j]; // TODO
+                    canvasModel.getBoard()[x + i][y + j] = figure[i][j];
                 }
             }
         }
@@ -135,7 +135,7 @@ public class BoardController extends CanvasController {
         for (int i = 0; i < figureSize; i++) {
             for (int j = 0; j < figureSize; j++) {
                 if (!(((x + i) >= boardSize) || ((y + j) >= boardSize))) {
-                    sampleSquare[i][j] = canvasModel.getBoard()[x + i][y + j]; // TODO get cell at & remove get board
+                    sampleSquare[i][j] = canvasModel.getState(x + i,y + j);
                 } else {
                     sampleSquare[i][j] = 0;
                 }

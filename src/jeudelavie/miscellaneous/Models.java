@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Models {
     private int defaultFigureSize;
-    private List<Pattern> patternList; //todo hashmap
+    private List<Pattern> patternList;
 
     public Models(int defaultFigureSize) {
         this.defaultFigureSize = defaultFigureSize;

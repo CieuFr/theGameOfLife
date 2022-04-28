@@ -109,7 +109,7 @@ public class FrameController implements Initializable {
     }
 
     @FXML
-    protected void onRandomizeButtonAction() { // TODO readd if ... for value selection
+    protected void onRandomizeButtonAction() {
         ButtonType button = alertGenerationConfirmation("You are about to randomize the board");
         if (button == ButtonType.OK) {
             this.boardController.randomizeBoard((int) randomizeSlider.getValue());
@@ -124,12 +124,11 @@ public class FrameController implements Initializable {
     @FXML
     protected void onLoadButtonAction() {
         if (models.getPatternFromName(patternLoadingCombo.getValue()) != null) {
-            figureController.getFigureModel().setBoard(models.getPatternFromName(patternLoadingCombo.getValue())); // TODO set size too !!
+            figureController.getFigureModel().setBoard(models.getPatternFromName(patternLoadingCombo.getValue()));
             figureController.draw();
         }
     }
 
-    //TODO RESIZE FUNCTION DANS BOARD
     @FXML
     protected void onBoardResizeButtonAction() {
         if (!(Objects.equals(boardSizeTextField.getText(), ""))) {
@@ -217,7 +216,6 @@ public class FrameController implements Initializable {
         AtomicBoolean minHealthChanging = new AtomicBoolean(false);
         AtomicBoolean maxHealthChanging = new AtomicBoolean(false);
 
-        //TODO REFACTOR
         lonelinessDeathCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             if (!lonelinessChanging.get()) {
                 lonelinessChanging.set(true);
@@ -230,7 +228,6 @@ public class FrameController implements Initializable {
                     if (button == ButtonType.OK) {
                         this.frameModel.setLonelinessDeath(Integer.parseInt(lonelinessDeathCombo.getSelectionModel().getSelectedItem()));
                     } else {
-                        //TODO Revert selected choice
                         lonelinessDeathCombo.getSelectionModel().clearSelection();
                         lonelinessDeathCombo.getSelectionModel().select(oldValue);
                     }

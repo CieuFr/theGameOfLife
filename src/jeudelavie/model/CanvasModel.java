@@ -60,7 +60,7 @@ public abstract class CanvasModel {
         this.board[x][y] = this.board[x][y] == 1 ? 0 : 1;
     }
 
-    public void resetBoard() { // TODO
+    public void resetBoard() {
         for (int[] row : this.board) {
             Arrays.fill(row, 0);
         }
