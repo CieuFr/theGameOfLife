@@ -1,3 +1,5 @@
+package jeudelavie;
+
 import javafx.application.Application;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
